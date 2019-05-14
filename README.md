@@ -1,6 +1,6 @@
 # National Credit Health
 
-There's no debt about it, credit scores (and how they add up, or don't) can be a tough web to untangle. Who's the most credit savvy among us? Will your credit score rise as you earn more? Here we'll take a look at how much debt we have throughout the country, where we carry our debt, credit score trends, and ask "Should we be giving our scores so much **_credit_**?". 
+There's no debt about it, credit scores (and how they add up, or don't) can be a tough web to untangle. Who's the most credit savvy among us? Will your credit score rise as you earn more? Here we'll take a look at how much debt we have as a nation, where we carry our debt, credit score trends, and ask "Should we be giving our scores so much **_credit_**?". 
 
 
 ## Data Resources
