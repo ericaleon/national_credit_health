@@ -7,7 +7,7 @@ There's no debt about it, credit scores (and how they add up, or don't) can be a
 
 * [Consumer Financial Protection Bureau](https://data.consumerfinance.gov/dataset/Consumer-Complaints/s6ew-h6mp) - SODA formatted data used to collect information on 7 of the products consumers filed complaints about from 2011 - 2019. 
 ```
-Debit Collection
+Debt Collection
 Payday Loans
 Vehicle Loans
 Mortgages
