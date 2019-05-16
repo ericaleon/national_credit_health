@@ -23,3 +23,8 @@ Credit Cards
 * [Youth Financial Education](https://files.consumerfinance.gov/f/documents/cfpb_youth-financial-education_lit-review.pdf) - Review data and sources.
 
 * [Consumer Finance Survey](https://www.federalreserve.gov/econres/scfindex.htm) - ETL data from the 4 types of debt (Auto, Credit, Mortgages, and Student Loans). 
+
+
+## Data Retrieval 
+
+* 
