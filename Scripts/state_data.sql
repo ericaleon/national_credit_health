@@ -25,3 +25,9 @@ ALTER TABLE state_data ADD COLUMN Total_Debt DOUBLE;
 UPDATE state_data
 INNER JOIN statedebt on state_data.State_Abb = statedebt.state
 SET state_data.Total_Debt = statedebt.`Total Debt`;
+
+SELECT state_data.State_Abb, ROUND((state_data.Total_Debt / state_income.Income) * 100, 0) AS 'Debt_Income(%)'
+FROM state_data
+INNER JOIN state_income
+ON state_data.State_Abb = state_income.State_Abb
+GROUP BY State; 

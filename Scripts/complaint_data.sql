@@ -20,10 +20,14 @@ WHERE
     
 SELECT COUNT("Complaint ID") FROM complaints;
 
-SELECT State, COUNT(`Complaint ID`) AS 'Number of Complaints'
+SELECT complaints.State, COUNT(complaints.`Complaint ID`) / (state_population.Population) * 10000 AS 'Complaints per 10,000 people'
 FROM complaints
+INNER JOIN state_population
+ON complaints.State = state_population.State
 GROUP BY State; 
 
-SELECT State, COUNT(`Complaint ID`) AS 'Number of Complaints', Product
+SELECT complaints.State, COUNT(complaints.`Complaint ID`) / (state_population.Population) * 10000 AS 'Complaints per 10,000 people', complaints.Product
 FROM complaints
+INNER JOIN state_population
+ON complaints.State = state_population.State
 GROUP BY State, Product; 
