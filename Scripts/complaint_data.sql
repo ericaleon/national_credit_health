@@ -2,6 +2,13 @@ USE credit_health;
 SET SQL_SAFE_UPDATES = 0;
 SELECT * FROM complaints;
 
+ALTER TABLE complaints ADD COLUMN state_id INT;
+UPDATE complaints
+INNER JOIN state_id_lookup on complaints.State = state_id_lookup.abbr
+SET complaints.state_id = state_id_lookup.id;
+
+ALTER TABLE `complaints` DROP COLUMN `State`;
+
 DELETE FROM complaints 
 WHERE 
 	product = "Credit reporting, credit repair services, or other personal consumer reports";
@@ -20,14 +27,14 @@ WHERE
     
 SELECT COUNT("Complaint ID") FROM complaints;
 
-SELECT complaints.State, COUNT(complaints.`Complaint ID`) / (state_population.Population) * 10000 AS 'Complaints per 10,000 people'
+SELECT complaints.state_id, COUNT(complaints.`Complaint ID`) / (state_data.state_population) * 10000 AS 'Complaints per 10,000 people', state_id_lookup.abbr AS 'State'
 FROM complaints
-INNER JOIN state_population
-ON complaints.State = state_population.State
-GROUP BY State; 
+INNER JOIN state_data ON complaints.state_id = state_data.state_id
+INNER JOIN state_id_lookup ON complaints.state_id = state_id_lookup.id
+GROUP BY state_id, state; 
 
-SELECT complaints.State, COUNT(complaints.`Complaint ID`) / (state_population.Population) * 10000 AS 'Complaints per 10,000 people', complaints.Product
+SELECT complaints.state_id, COUNT(complaints.`Complaint ID`) / (state_data.state_population) * 10000 AS 'Complaints per 10,000 people', state_id_lookup.abbr AS 'State', complaints.product
 FROM complaints
-INNER JOIN state_population
-ON complaints.State = state_population.State
-GROUP BY State, Product; 
+INNER JOIN state_data ON complaints.state_id = state_data.state_id
+INNER JOIN state_id_lookup ON complaints.state_id = state_id_lookup.id
+GROUP BY state_id, state, product; 
