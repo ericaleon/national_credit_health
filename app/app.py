@@ -47,13 +47,13 @@ def usdata():
 @app.route('/statedata')
 def statedata():
     """Return lists of credit and debt data for each state"""
-    results = session.query(State_data.abbr,State_data.score,State_data.Vantage_Score,
+    results = session.query(State_lookup.name,State_data.score,State_data.Vantage_Score,
         State_data.Debt_Income, State_data.Mor_Del).all()
 
     all_states = []
-    for abbr, score, vantage, debt, income in results:
+    for name, score, vantage, debt, income in results:
         states_dict = {}
-        states_dict["State"] = abbr
+        states_dict["State"] = name
         states_dict["Financial Health Score"] = score
         states_dict["Vantage Credit Score"] = vantage
         states_dict["Debt-to-Income"] = debt
