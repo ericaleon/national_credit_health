@@ -48,16 +48,17 @@ def usdata():
 def statedata():
     """Return lists of credit and debt data for each state"""
     results = session.query(State_lookup.name,State_data.score,State_data.Vantage_Score,
-        State_data.Debt_Income, State_data.Mor_Del).all()
+        State_data.Debt_Income, State_data.Mor_Del, State_data.grade).all()
 
     all_states = []
-    for name, score, vantage, debt, income in results:
+    for name, score, vantage, debt_inc, mort_del, grade in results:
         states_dict = {}
         states_dict["State"] = name
-        states_dict["Financial Health Score"] = score
-        states_dict["Vantage Credit Score"] = vantage
-        states_dict["Debt-to-Income"] = debt
-        states_dict["Mortgage Delinquency Rate"] = income
+        states_dict["Financial_Score"] = score
+        states_dict["Credit_Score"] = vantage
+        states_dict["Debt-Income"] = debt_inc
+        states_dict["Mortg_Delinquency"] = mort_del
+        states_dict["Ed_Grade"] = grade
         all_states.append(states_dict)
 
     return jsonify(all_states)
