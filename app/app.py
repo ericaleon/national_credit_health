@@ -63,7 +63,7 @@ def statedata():
 @app.route('/complaints')
 def complaints():
     """Return consumer financial protection bureau complaint data"""
-    results = session.query()
+    # results = session.query()
 
 
 if __name__ == '__main__':
