@@ -39,10 +39,6 @@ def home():
     """Render Home Page."""
     return render_template("index.html")
 
-@app.route('/usdata')
-def usdata():
-    """Return a list of overall U.S. credit card debt data"""
-
 
 @app.route('/statedata')
 def statedata():
@@ -67,7 +63,7 @@ def statedata():
 @app.route('/complaints')
 def complaints():
     """Return consumer financial protection bureau complaint data"""
-
+    results = session.query()
 
 
 if __name__ == '__main__':
