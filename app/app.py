@@ -16,12 +16,11 @@ from flask_sqlalchemy import SQLAlchemy
 ###########
 engine = create_engine('sqlite:///../Database/credit_health.db?check_same_thread=False')
 
+# *Another possible flask sqlite option - not vetted yet*
 # class Config(object):
 #     SQLALCHEMY_DATABASE_URI = 'sqlite:///../Database/credit_health.db?check_same_thread=False'
 
-
 # db = SQLAlchemy()
-
 
 # def create_app():
 #     app.config.from_object(Config)
@@ -42,7 +41,7 @@ State_lookup = Base.classes.state_lookup
 # Create our session (link) from Python to the DB
 session = Session(engine)
 
-###########
+#####end db setup######
 
 # Flask Setup & routes
 app = Flask(__name__)
@@ -76,7 +75,10 @@ def statedata():
 @app.route('/complaints')
 def complaints():
     """Return consumer financial protection bureau complaint data"""
-    # results = session.query()
+    results = session.query(Complaints.product, Complaints.state_id).all()
+    # also grab State_lookup.name where Complaints.state_id = State_lookup.state_id
+
+    all_complaints = []
 
 
 if __name__ == '__main__':
