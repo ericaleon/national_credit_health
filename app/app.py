@@ -55,13 +55,13 @@ def home():
 @app.route('/statedata')
 def statedata():
     """Return lists of credit and debt data for each state"""
-    results = session.query(State_lookup.name,State_data.score,State_data.Vantage_Score,
+    results = session.query(State_data.abbr,State_data.score,State_data.Vantage_Score,
         State_data.Debt_Income, State_data.Mor_Del, State_data.grade).all()
 
     all_states = []
-    for name, score, vantage, debt_inc, mort_del, grade in results:
+    for abbr, score, vantage, debt_inc, mort_del, grade in results:
         states_dict = {}
-        states_dict["State"] = name
+        states_dict["State"] = abbr
         states_dict["Financial_Score"] = score
         states_dict["Credit_Score"] = vantage
         states_dict["Debt-Income"] = debt_inc
@@ -75,10 +75,10 @@ def statedata():
 @app.route('/complaints')
 def complaints():
     """Return consumer financial protection bureau complaint data"""
-    results = session.query(Complaints.product, Complaints.state_id).all()
-    # also grab State_lookup.name where Complaints.state_id = State_lookup.state_id
+    # results = session.query(Complaints.product, Complaints.state_id).all()
+    # # also grab State_lookup.name where Complaints.state_id = State_lookup.state_id
 
-    all_complaints = []
+    # all_complaints = []
 
 
 if __name__ == '__main__':
