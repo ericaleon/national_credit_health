@@ -14,7 +14,20 @@ from flask_sqlalchemy import SQLAlchemy
 
 # DB Setup
 ###########
-engine = create_engine('sqlite:///../Database/credit_health.db')
+engine = create_engine('sqlite:///../Database/credit_health.db?check_same_thread=False')
+
+# class Config(object):
+#     SQLALCHEMY_DATABASE_URI = 'sqlite:///../Database/credit_health.db?check_same_thread=False'
+
+
+# db = SQLAlchemy()
+
+
+# def create_app():
+#     app.config.from_object(Config)
+#     app = Flask(__name__)
+#     db.init_app(app)
+
 
 # reflect an existing database into a new model
 Base = automap_base()
