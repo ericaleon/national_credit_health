@@ -14,7 +14,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 # DB Setup
 ###########
-engine = create_engine('sqlite:///../Database/credit_health.db?check_same_thread=False')
+engine = create_engine('sqlite:///credit_health.db?check_same_thread=False')
 
 # *Another possible flask sqlite option - not vetted yet*
 # class Config(object):

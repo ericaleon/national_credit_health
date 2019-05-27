@@ -2,38 +2,14 @@ Database: credit_health
 
 Table: complaints
 	col: Complaint ID
-	col: State
 	col: Product
 	col: Sub-product
 	col: Date
-		SELECT complaints.State, COUNT(complaints.`Complaint ID`) / (state_population.Population) * 10000 
-		AS 'Complaints per 10,000 people'
-
-		FROM complaints
-
-		INNER JOIN state_population
-		
-ON complaints.State = state_population.State
-
-		GROUP BY State(&Product); 		
-
-Table: creditcard_byincome
-	col: Income (string)
-	col: Debt (int)
-
-Table: creditcard_byage
-	col: Age (string)
-	col: Debt (int)
-
-Table: state_income
-	col: GeoName (full state)
-	col: State_Abb
-	col: Income
+	col: state_id	
 
 Table: state_data
-	col: State
-	col: State_Abb
-	col: Vantate_Score
+	col: state_id
+	col: Vantage_Score
 	col: Auto_Del
 	col: CC_Del
 	col: Mor_Del
@@ -43,40 +19,14 @@ Table: state_data
 	col: Mor_Debt
 	col: Stu_Debt
 	col: Total_Debt
-		SELECT state_data.State_Abb, ROUND((state_data.Total_Debt / state_income.Income) * 100, 0) AS 'Debt_Income(%)'
-		
-FROM state_data
-
-		INNER JOIN state_income
-
-		ON state_data.State_Abb = state_income.State_Abb
-
-		GROUP BY State; 
-
-Table: state_population
-	col: state
-	col: Population
-
-
-Table: statedebt
-	col: state
-	col: Auto Debt
-	col: Credit Card Debt
-	col: Mortgage Debt
-	col: Student Loan Debt
-	col: Total Debt
-
-Table: statedelinquency
-	col: state
-	col: Auto Delinquency
-	col: Credit Card Delinquency
-	col: Mortgage Delinquency
-	col: Student Loan Delinquency
+	col: state_population
+	col: income
+	col: Debt_Income
 
 Table: statelookup
+	col: id
 	col: StateName
 	col: StateAbbrev
-
 
 Credit Scoring:
 
@@ -123,3 +73,6 @@ Debt to Income Scoring:
 	117 - 123 = 3
 	123 - 129 = 2
 	129 - 135 = 1
+
+
+
