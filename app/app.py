@@ -16,11 +16,11 @@ from flask_sqlalchemy import SQLAlchemy
 ###########
 engine = create_engine('sqlite:///credit_health.db?check_same_thread=False')
 
-# *Another possible flask sqlite option - not vetted yet*
+# *Another possible flask sqlite option? - not vetted yet*
 # class Config(object):
-#     SQLALCHEMY_DATABASE_URI = 'sqlite:///../Database/credit_health.db?check_same_thread=False'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///../Database/credit_health.db?check_same_thread=False'
 
-# db = SQLAlchemy()
+db = SQLAlchemy()
 
 # def create_app():
 #     app.config.from_object(Config)
@@ -75,11 +75,23 @@ def statedata():
 @app.route('/complaints')
 def complaints():
     """Return consumer financial protection bureau complaint data"""
-    # results = session.query(Complaints.product, Complaints.state_id).all()
-    # # also grab State_lookup.name where Complaints.state_id = State_lookup.state_id
+    # results = session.query(Complaints.Product, func.count(Complaints.Product)).\
+    #     outerjoin(State_lookup.abbr, Complaints.abbr == State_lookup.abbr).\
+    #     group_by(Complaints.abbr).limit(15)
+    subq = session.query(Complaints.Product, func.count(Complaints.Product)).group_by(Complaints.Product).all()
+   
+    # create lists for results in subquery
+    product = [sub[0] for sub in subq]
+    count = [int(sub[1]) for sub in subq]
 
-    # all_complaints = []
 
+    # generate dictionary
+    dict = {
+        "Product Type": product,
+        "Complaint Count": count
+    }
+
+    return jsonify(dict)
 
 if __name__ == '__main__':
     app.run(debug=True)
