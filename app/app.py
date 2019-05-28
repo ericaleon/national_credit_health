@@ -14,19 +14,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 # DB Setup
 ###########
-engine = create_engine('sqlite:///credit_health.db?check_same_thread=False')
-
-# *Another possible flask sqlite option? - not vetted yet*
-# class Config(object):
-SQLALCHEMY_DATABASE_URI = 'sqlite:///../Database/credit_health.db?check_same_thread=False'
-
-db = SQLAlchemy()
-
-# def create_app():
-#     app.config.from_object(Config)
-#     app = Flask(__name__)
-#     db.init_app(app)
-
+engine = create_engine('sqlite:///../Database/credit_health.db?check_same_thread=False')
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -75,23 +63,44 @@ def statedata():
 @app.route('/complaints')
 def complaints():
     """Return consumer financial protection bureau complaint data"""
+    # **Query for Complaint Counts by Type for each State**
+    # SELECT abbr, Product, COUNT(Complaint_ID)
+    # FROM complaints
+    # GROUP BY abbr, Product
+    # ORDER BY abbr ASC;
+    
+    # **Query for Total Complaints by State**
+    # SELECT abbr, COUNT(Complaint_ID)
+    # FROM complaints
+    # GROUP BY abbr
+    # ORDER BY abbr ASC;
+
     # results = session.query(Complaints.Product, func.count(Complaints.Product)).\
     #     outerjoin(State_lookup.abbr, Complaints.abbr == State_lookup.abbr).\
-    #     group_by(Complaints.abbr).limit(15)
-    subq = session.query(Complaints.Product, func.count(Complaints.Product)).group_by(Complaints.Product).all()
+    #     group_by(Complaints.abbr).all()
+    subq = session.query(Complaints.abbr, Complaints.Product, func.count(Complaints.Product)).group_by(Complaints.abbr).all()
    
     # create lists for results in subquery
-    product = [sub[0] for sub in subq]
-    count = [int(sub[1]) for sub in subq]
+    state = [sub[0] for sub in subq]
+    product = [sub[1] for sub in subq]
+    count = [int(sub[2]) for sub in subq]
 
-
-    # generate dictionary
-    dict = {
-        "Product Type": product,
-        "Complaint Count": count
+    data = {
+        "State": state,
+        "Product": product,
+        "Count": count
     }
 
-    return jsonify(dict)
+    # generate dictionary
+    complaint_dict = [{
+        # "State": state,
+        # "Population": pop,
+        # "Avg. Credit Score": avg_score,
+        # "Complaint Count": count,
+        # "Count by Type": prod_count
+    }]
+
+    return jsonify(data)
 
 if __name__ == '__main__':
     app.run(debug=True)
