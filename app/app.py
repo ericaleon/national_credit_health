@@ -87,12 +87,10 @@ def complaints():
 
     # create lists for results in subquery - ** below code still in progress **
     state = [sub[0] for sub in subq]
-    product = [sub[1] for sub in subq]
     count = [int(sub[2]) for sub in subq]
 
     data = {
         "State": state,
-        "Product": product,
         "Count": count
     }
 
@@ -102,10 +100,12 @@ def complaints():
         # "Population": pop,
         # "Avg. Credit Score": avg_score,
         # "Complaint Count": count,
-        # "Count by Type": prod_count
+        # "Count by Type": complaint_dict
     }]
 
     return jsonify(data)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
