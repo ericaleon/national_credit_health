@@ -63,24 +63,29 @@ def statedata():
 @app.route('/complaints')
 def complaints():
     """Return consumer financial protection bureau complaint data"""
-    # **Query for Complaint Counts by Type for each State**
+    # **mySQL Query for Complaint Counts by Type for each State**
     # SELECT abbr, Product, COUNT(Complaint_ID)
     # FROM complaints
     # GROUP BY abbr, Product
     # ORDER BY abbr ASC;
-    
-    # **Query for Total Complaints by State**
-    # SELECT abbr, COUNT(Complaint_ID)
-    # FROM complaints
-    # GROUP BY abbr
-    # ORDER BY abbr ASC;
 
-    # results = session.query(Complaints.Product, func.count(Complaints.Product)).\
-    #     outerjoin(State_lookup.abbr, Complaints.abbr == State_lookup.abbr).\
-    #     group_by(Complaints.abbr).all()
-    subq = session.query(Complaints.abbr, Complaints.Product, func.count(Complaints.Product)).group_by(Complaints.abbr).all()
-   
-    # create lists for results in subquery
+    # **Main mySQL Query**
+    # SELECT complaint_full.abbr, full_state_data.Vantage_Score, COUNT(complaint_full.Complaint_ID) as `Total Complaints`, COUNT(complaint_full.Complaint_ID)*10000/full_state_data.state_population as `complaints per 10,000`, full_state_data.state_population
+    # FROM complaint_full
+    # INNER JOIN full_state_data
+    # ON complaint_full.abbr = full_state_data.abbr
+    # GROUP BY complaint_full.abbr;
+
+    # sub-query for Complaint count by Product Type
+    subq = session.query(Complaints.abbr, Complaints.Product, func.count(Complaints.Product).\
+        group_by(Complaints.abbr, Complaints.Product).order_by(Complaints.abbr.asc()).all()
+    
+    # Main query to capture State abbreviation, Credit Score, Total Complaints, Complaints per 10,000 people
+    query = session.query(Complaints.abbr, State_data.Vantage_Score, Complaints.state_population, func.count(Complaints.Complaint_ID).label("Total Complaints"), (func.count(Complaints.Complaint_ID)*10000/int(State_data.state_population)).label("Complaints per 10,000 People")).\
+        innerjoin(Complaints, State_data, Complaints.abbr == State_data.abbr).\
+            group_by(Complaints.abbr).all()
+
+    # create lists for results in subquery - ** below code still in progress **
     state = [sub[0] for sub in subq]
     product = [sub[1] for sub in subq]
     count = [int(sub[2]) for sub in subq]
