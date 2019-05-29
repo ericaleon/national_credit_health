@@ -14,7 +14,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 # DB Setup
 ###########
-engine = create_engine('sqlite:///../Database/credit_health.db?check_same_thread=False')
+engine = create_engine('sqlite:///credit_health.db?check_same_thread=False')
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -43,13 +43,13 @@ def home():
 @app.route('/statedata')
 def statedata():
     """Return lists of credit and debt data for each state"""
-    results = session.query(State_data.abbr,State_data.score,State_data.Vantage_Score,
+    results = session.query(State_data.name,State_data.score,State_data.Vantage_Score,
         State_data.Debt_Income, State_data.Mor_Del, State_data.grade).all()
 
     all_states = []
-    for abbr, score, vantage, debt_inc, mort_del, grade in results:
+    for name, score, vantage, debt_inc, mort_del, grade in results:
         states_dict = {}
-        states_dict["State"] = abbr
+        states_dict["State"] = name
         states_dict["Financial_Score"] = score
         states_dict["Credit_Score"] = vantage
         states_dict["Debt-Income"] = debt_inc

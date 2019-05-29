@@ -25,16 +25,16 @@ var proxyUrl = 'https://cors-anywhere.herokuapp.com/',
 
 // Function that will determine the color each stte based on score
 function getColor(Financial_Score) {
-    return Financial_Score > 9   ? '#91D317' :
-    Financial_Score > 8   ? '#A9F122' :
-    Financial_Score > 7   ? '#BCF138' :
-    Financial_Score > 6   ? '#C7F14B' :
-    Financial_Score > 5   ? '#D0F14B' :
-    Financial_Score > 4   ? '#DBF77E' :
-    Financial_Score > 3   ? '#E1F796' :
-    Financial_Score > 2   ? '#E4F7A5' :
-    Financial_Score > 1   ? '#E5F3B6' :
-                      '#E9F3C8';
+    return Financial_Score > 9   ? '#1A5B00' :
+    Financial_Score > 8   ? '#2E9506' :
+    Financial_Score > 7   ? '#4DB027' :
+    Financial_Score > 6   ? '#67D13E' :
+    Financial_Score > 5   ? '#7CE155' :
+    Financial_Score > 4   ? '#9EF37D' :
+    Financial_Score > 3   ? '#D3FAC4' :
+    Financial_Score > 2   ? '#E1FED7' :
+    Financial_Score > 1   ? '#F1FEEC' :
+                      '#fffff';
 };
 
 // Grabbing our GeoJSON data..
@@ -75,8 +75,34 @@ d3.json(proxyUrl + targetUrl, function(data) {
         }
       });
       // Giving each feature a pop-up with information pertinent to it
-      layer.bindPopup('<h3>State Score</h3>' + response.map(data => data.Financial_Score) + '<hr><ul><li> Vantage Score: ' + response.map(data => data.Credit_Score) + "</li><li>Debt/Income Ratio: " + response.map(data => data.Debt-Income) + "</li><li>Delinquency Rate: " + response.map(data => data.Mortg_Delinquency) + "</li><hr><p>Financial Education Grade: " + response.map(data => data.Ed_Grade))
+      layer.bindPopup('<h3>State Score</h3>' + response.map(data => data.Financial_Score) + '<hr><ul><li> Vantage Score: ' + response.map(data => data.Credit_Score) + "</li><li>Debt/Income Ratio: " + response.map(data => data.Debt-Income) + "</li><li>Delinquency Rate: " + response.map(data => data.Mortg_Delinquency) + "</li><hr><p>Financial Education Grade: " + response.map(data => data.Ed_Grade), {offset: new L.point(10,10)});
     }
    
   }).addTo(map);
+
+  var legend = L.control({ position: "bottomright"});
+      legend.onAdd = function() {
+        var div = L.DomUtil.create("div", "info legend");
+        var limits = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        var colors = ["#fffff", '#F1FEEC', '#E1FED7', '#D3FAC4', '#9EF37D', '#7CE155', '#67D13E', '#4DB027', '#2E9506', '#1A5B00']
+        var labels = [];
+
+        var legendInfo = "<h2>Financial Health Score</h2>" + 
+          "<div class=\"labels\">" +
+            "<div class=\"min\">" + limits[0] + "</div>" +
+            "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+          "</div>";
+
+        div.innerHTML = legendInfo;
+
+        limits.forEach(function(limit, index) {
+          labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
+        });
+    
+        div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+        return div;
+      };
+    
+      // Adding legend to the map
+      legend.addTo(map);
 });

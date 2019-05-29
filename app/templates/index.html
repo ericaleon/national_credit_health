@@ -28,188 +28,172 @@
 </head>
 
 <body>
-  <div class="container-fluid">
-      <div class="row">
-        <div class="jumbotron jumbotron-fluid">
-          <div class="container">
-            <img src="../../Resources/giphy.gif" alt="Debt" style="display:block; margin-left:auto; margin-right:auto">
-            <h1 class="display-4" style="text-align: center">National Credit Health</h1>
-            <h4 style="text-align: center">by LaShanti, Erica, Felicia, & Emily</h4>
-            <p style="text-align: justify; width: 75%; margin-left:auto; margin-right:auto; margin-top: 30px">There's no debt about it, credit scores (and how they add up,
-                or don't) can be a tough web to untangle. Who's the most credit
-                savvy among us? Will your credit score rise as you earn more? 
-                Here we'll take a look at how much debt we have as a nation, 
-                where we carry our debt, credit score trends, and ask "Should 
-                we be giving our scores so much credit?"
-              </p>
-          </div>
-        </div>
-
-        <div class="col-sm-12 col-lg-12">
-            <div class="container-fluid">
-                <h2 style="text-align: center">Cash or Credit?</h2>
-                <hr style="width:30%">
-                <h4 style="text-align: center; width: 75%; margin-left:auto; margin-right:auto; padding-bottom: 12px">Does our credit card debt increase or decrease as we age? 
-                  <br>
-                Does making more money mean you're likely to have more or less credit card debt?
-                </h4>             
-            </div>
-        </div>
-
-        <!-- Load d3.js -->
-        <script src="https://d3js.org/d3.v4.js"></script>
-        
-        <!-- Add 2 buttons -->
-        <button style="display:block; margin-left:auto; margin-right:auto" onclick="update(data1)">Average Credit Card Debt vs. Age</button>
-        <button style="display:block; margin-left:auto; margin-right:auto; margin-top:5px" onclick="update(data2)">Average Credit Card Debt vs. Income</button>
-
-        <!-- Create a div where the graph will take place -->
-        <div style="display:block; margin-left:auto; margin-right:auto;" id="my_dataviz"></div>
-
-        <script>
-
-            // create 2 data_set
-            var data1 = [
-              {group: "Age 18 - 35", value: "5808"},
-              {group: "Age 35 - 44", value: "8235"},
-              {group: "Age 45 - 54", value: "9096"},
-              {group: "Age 55 - 64", value: "8158"},
-              {group: "Age 65 - 69", value: "6876"},
-              {group: "Age 70 - 74", value: "6465"},
-              {group: "Age 75 and up", value: "5638"}
-            ];
-
-            var data2 = [
-              {group: "Less Than 24999", value: "3000"},
-              {group: "25000 to 44999", value: "3900"},
-              {group: "45000 to 69999", value: "4900"},
-              {group: "70000 to 114999", value:"5800"},
-              {group: "115000 to 159999", value: "8300"},
-              {group: "160000 and up", value: "11200"}
-            ];
-            
-            // set the dimensions and margins of the graph
-        var margin = {top: 40, right: 400, bottom: 20, left: 450},
-            width = 900,
-            height = 500 - margin.top - margin.bottom;
-
-        // append the svg object to the body of the page
-        var svg = d3.select("#my_dataviz")
-          .append("svg")
-            .attr("width", width * margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-            .attr("transform",
-                  "translate(" + margin.left + "," + margin.top + ")");
-
-        // Initialize the X axis
-        var x = d3.scaleBand()
-          .range([ 0, width ])
-          .padding(0.1);
-        var xAxis = svg.append("g")
-          .attr("transform", "translate(0," + height + ")")
-
-        // Initialize the Y axis
-        var y = d3.scaleLinear()
-          .range([ height, 0]);
-        var yAxis = svg.append("g")
-          .attr("class", "myYaxis")
-
-        
-
-        // A function that create / update the plot for a given variable:
-        function update(data) {
-
-          // Update the X axis
-          x.domain(data.map(function(d) { return d.group; }))
-          xAxis.call(d3.axisBottom(x))
-          
-          // Update the Y axis
-          y.domain([0, d3.max(data, function(d) { return d.value }) ]);
-          yAxis.transition().duration(1000).call(d3.axisLeft(y)); 
-          
-          // Create the u variable
-          var u = svg.selectAll("rect")
-            .data(data)
-
-          u
-            .enter()
-            .append("rect") // Add a new rect for each new elements
-            .merge(u) // get the already existing elements as well
-            .transition() // and apply changes to all of them
-            .duration(1000)
-              .attr("x", function(d) { return x(d.group); })
-              .attr("y", function(d) { return y(d.value); })
-              .attr("width", x.bandwidth())
-              .attr("height", function(d) { return height - y(d.value); })
-              .attr("fill", "#91D317")
-              
-          // If less group in the new dataset, I delete the ones not in use anymore
-          u
-            .exit()
-            .remove()
-        }
-
-        // Initialize the plot with the first dataset
-        update(data1)
-
-        </script>
-
-        <div class="col-sm-12 col-lg-12">
-            <div class="container-fluid">
-                <h4 style="text-align: center; width: 50%; margin-left:auto; margin-right:auto; padding-bottom: 12px">The data shows our credit card burden steadily increases the more we earn and the more we age until age 55. Coincidently, this is also likely a worker's peak earning age as well.
-                </h4>             
-            </div>
-        </div>
-        <br>
-        <div class="col-sm-12 col-lg-12">
-          <div class="container-fluid">
-              <h2 style="text-align: center; margin-top: 50px">How Financially Healthy is Your State?</h2>
-              <hr style="width:30%">
-              <h4 style="text-align: justify; width: 75%; margin-left:auto; margin-right:auto">Determining true financial health is a complex task. 
-                  Below you'll find states scored 1 - 10 based on three key factors: 
-                  average credit score, average debt/income ratio, and rate of mortgage delinquency.
-                  <br>
-                  <br>
-                  You'll also find their financial education grade. This is a measure by which 
-                  the Center for Financial Literacy grades states. A 2016 survey indicated that only 31% of young Americans (ages 18 to 26) agreed that their high
-                  school education did a good job of teaching them healthy financial habits*. 
-                  <br>
-                  <br>
-                  The grading system used evaluates 'A' states as states that require a minimum of
-                  60 hours (or one semester) of personal finance instruction as a graduation requirement. In 'F' states there is virtually no requirement for personal finance education in high school.
- 
-                  
-              </h4>
-                <br>
-              <h3 style="text-align: center">Explore A State Below.</h3>              
-          </div>
-      </div>
-
+  <div class="jumbotron jumbotron-fluid">
+    <div class=".container-fluid">
+      <img src="../../Resources/giphy.gif" alt="Debt" style="display:block; margin-left:auto; margin-right:auto">
+      <h1 class="display-4" style="text-align: center">National Credit Health</h1>
+      <h4 style="text-align: center">by LaShanti, Erica, Felicia, & Emily</h4>
+      <p style="text-align: justify; width: 75%; margin-left:auto; margin-right:auto; margin-top: 30px">There's no debt about it, credit scores (and how they add up,
+          or don't) can be a tough web to untangle. Who's the most credit
+          savvy among us? Will your credit score rise as you earn more? 
+          Here we'll take a look at how much debt we have as a nation, 
+          where we carry our debt, credit score trends, and ask "Should 
+          we be giving our scores so much credit?"
+        </p>
     </div>
   </div>
 
-  <div id="map"></div>
-  <p style="text-align: center; width: 50%; margin-left:auto; margin-right:auto; font-size: 10px">*Bank of America/USA TODAY Better Money Habits Report, “Young Americans & Money, Fall 2016.” <a href=https://about.bankofamerica.com/assets/pdf/BOA_BMH_2016-REPORT-v5.pdf>https://about.bankofamerica.com/assets/pdf/BOA_BMH_2016-REPORT-v5.pdf</a>.</p>
-
   <div class="col-sm-12 col-lg-12">
       <div class="container-fluid">
-          <h2 style="text-align: center; margin-top: 50px">Can You Trust Your Credit Score?</h2>
+          <h2 style="text-align: center">Cash or Credit?</h2>
           <hr style="width:30%">
-          <h4 style="text-align: justify; width: 75%; margin-left:auto; margin-right:auto">Credit card fraud, inaccurate reporting, identity theft, even human error can 
-            drastically effect your credit score. These score help determine your interest rate, borrowing abilities, even your career prospects. 
-          </h4>
+          <h4 style="text-align: center; width: 75%; margin-left:auto; margin-right:auto; padding-bottom: 12px">Does our credit card debt increase or decrease as we age? 
             <br>
-          <p style="text-align: center">Below are the Consumer Financial Protection Bureau's 
-              complaints in 2017 for Debt Collection, Payday Loans, Vehicle Loans, Mortgages, Student Loans, Credit Reporting and Credit Cards. </p>              
+          Does making more money mean you're likely to have more or less credit card debt?
+          </h4>             
       </div>
   </div>
+
+  <!-- Load d3.js -->
+  <script src="https://d3js.org/d3.v4.js"></script>
+  
+  <!-- Add 2 buttons -->
+  <button style="display:block; margin-left:auto; margin-right:auto" onclick="update(data1)">Average Credit Card Debt vs. Age</button>
+  <button style="display:block; margin-left:auto; margin-right:auto; margin-top:5px" onclick="update(data2)">Average Credit Card Debt vs. Income</button>
+
+  <!-- Create a div where the graph will take place -->
+  <div style="display:block; margin-left:auto; margin-right:auto;" id="my_dataviz"></div>
+
+  <script>
+      // create 2 data_set
+      var data1 = [
+        {group: "Age 18 - 35", value: "5808"},
+        {group: "Age 35 - 44", value: "8235"},
+        {group: "Age 45 - 54", value: "9096"},
+        {group: "Age 55 - 64", value: "8158"},
+        {group: "Age 65 - 69", value: "6876"},
+        {group: "Age 70 - 74", value: "6465"},
+        {group: "Age 75 and up", value: "5638"}
+      ];
+      var data2 = [
+        {group: "Less Than $24,999", value: "3000"},
+        {group: "$25,000 to $44,999", value: "3900"},
+        {group: "$45,000 to $69,999", value: "4900"},
+        {group: "$70,000 to $114,999", value:"5800"},
+        {group: "$115,000 to $159,999", value: "8300"},
+        {group: "$160,000 and up", value: "11200"}
+      ];
+      
+      // set the dimensions and margins of the graph
+  var margin = {top: 40, right: 400, bottom: 20, left: 450},
+      width = 900,
+      height = 500 - margin.top - margin.bottom;
+  // append the svg object to the body of the page
+  var svg = d3.select("#my_dataviz")
+    .append("svg")
+      .attr("width", width * margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+  // Initialize the X axis
+  var x = d3.scaleBand()
+    .range([ 0, width ])
+    .padding(0.1);
+  var xAxis = svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+  // Initialize the Y axis
+  var y = d3.scaleLinear()
+    .range([ height, 0]);
+  var yAxis = svg.append("g")
+    .attr("class", "myYaxis")
+  
+  // A function that create / update the plot for a given variable:
+  function update(data) {
+    // Update the X axis
+    x.domain(data.map(function(d) { return d.group; }))
+    xAxis.call(d3.axisBottom(x))
+    
+    // Update the Y axis
+    y.domain([0, d3.max(data, function(d) { return d.value }) ]);
+    yAxis.transition().duration(1000).call(d3.axisLeft(y)); 
+    
+    // Create the u variable
+    var u = svg.selectAll("rect")
+      .data(data)
+    u
+      .enter()
+      .append("rect") // Add a new rect for each new elements
+      .merge(u) // get the already existing elements as well
+      .transition() // and apply changes to all of them
+      .duration(1000)
+        .attr("x", function(d) { return x(d.group); })
+        .attr("y", function(d) { return y(d.value); })
+        .attr("width", x.bandwidth())
+        .attr("height", function(d) { return height - y(d.value); })
+        .attr("fill", "#2E9506")
+        
+    // If less group in the new dataset, I delete the ones not in use anymore
+    u
+      .exit()
+      .remove()
+  }
+  // Initialize the plot with the first dataset
+  update(data1)
+  </script>
+
+<div class="col-sm-12 col-lg-12">
+      <div class="container-fluid">
+          <h4 style="text-align: center; width: 50%; margin-left:auto; margin-right:auto; padding-bottom: 12px">The data shows our credit card burden steadily increases the more we earn and the more we age until age 55. Coincidently, this is also likely a worker's peak earning age as well.
+          </h4>             
+      </div>
+  </div>
+  <br>
+<div class="col-sm-12 col-lg-12">
+  <div class="container-fluid">
+      <h2 style="text-align: center; margin-top: 50px">How Financially Healthy is Your State?</h2>
+      <hr style="width:30%">
+      <h4 style="text-align: justify; width: 75%; margin-left:auto; margin-right:auto">Determining true financial health is a complex task. 
+          Below you'll find states scored 1 - 10 based on three key factors: 
+          average credit score, average debt/income ratio, and rate of mortgage delinquency.
+          <br>
+          <br>
+          You'll also find their financial education grade. This is a measure by which 
+          the Center for Financial Literacy grades states. A 2016 survey indicated that only 31% of young Americans (ages 18 to 26) agreed that their high
+          school education did a good job of teaching them healthy financial habits*. 
+          <br>
+          <br>
+          The grading system used evaluates 'A' states as states that require a minimum of
+          60 hours (or one semester) of personal finance instruction as a graduation requirement. In 'F' states there is virtually no requirement for personal finance education in high school.
+
+          
+      </h4>
+        <br>
+      <h3 style="text-align: center">Explore A State Below.</h3>              
+  </div>
+</div>
+
+<div id="map"></div>
+<p style="text-align: center; width: 50%; margin-left:auto; margin-right:auto; font-size: 10px">*Bank of America/USA TODAY Better Money Habits Report, “Young Americans & Money, Fall 2016.” <a href=https://about.bankofamerica.com/assets/pdf/BOA_BMH_2016-REPORT-v5.pdf>https://about.bankofamerica.com/assets/pdf/BOA_BMH_2016-REPORT-v5.pdf</a>.</p>
+
+<div class="col-sm-12 col-lg-12">
+    <div class="container-fluid">
+        <h2 style="text-align: center; margin-top: 50px">Can You Trust Your Credit Score?</h2>
+        <hr style="width:30%">
+        <h4 style="text-align: justify; width: 75%; margin-left:auto; margin-right:auto">Credit card fraud, inaccurate reporting, identity theft, even human error can 
+          drastically effect your credit score. These score help determine your interest rate, borrowing abilities, even your career prospects. 
+        </h4>
+          <br>
+        <p style="text-align: center">Below are the Consumer Financial Protection Bureau's 
+            complaints in 2017 for Debt Collection, Payday Loans, Vehicle Loans, Mortgages, Student Loans, Credit Reporting and Credit Cards. </p>              
+    </div>
+</div>
 
 
 
 
   <script type="text/javascript" src="../static/js/config.js"></script>
-  <script type="text/javascript" src="../static/js/logic_choropleth.js"></script>
+  <script type="text/javascript" src="../static/js/logic4.js"></script>
   <!-- <script src="https://cdn.plot.ly/plotly-1.31.2.min.js"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
