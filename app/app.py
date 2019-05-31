@@ -3,6 +3,8 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
+from json import dumps
+import json
 
 from flask import (
     Flask,
@@ -10,7 +12,10 @@ from flask import (
     jsonify)
 
 from flask_sqlalchemy import SQLAlchemy
-
+import os
+import sys
+sys.path.append("Users/Emily/Desktop/national_credit_health/app/templates/static/")
+from flask_cors import CORS, cross_origin
 
 # DB Setup
 ###########
@@ -34,17 +39,13 @@ session = Session(engine)
 # Flask Setup & routes
 app = Flask(__name__)
 
+CORS(app, support_credentials=True)
+
 @app.route('/')
 def home():
     """Render Home Page."""
-    return render_template("index.html")
-
-
-@app.route('/statedata')
-def statedata():
     """Return lists of credit and debt data for each state"""
-    results = session.query(State_data.name,State_data.score,State_data.Vantage_Score,
-        State_data.Debt_Income, State_data.Mor_Del, State_data.grade).all()
+    results = session.query(State_data.name,State_data.score,State_data.Vantage_Score, State_data.Debt_Income, State_data.Mor_Del, State_data.grade).all()
 
     all_states = []
     for name, score, vantage, debt_inc, mort_del, grade in results:
@@ -57,7 +58,29 @@ def statedata():
         states_dict["Ed_Grade"] = grade
         all_states.append(states_dict)
 
-    return jsonify(all_states)
+    stateDATA = json.dumps(all_states)
+    # state_data = json.loads(stateDATA)
+    return render_template("index.html", stateDATA = stateDATA)
+
+
+# @app.route('/statedata')
+# def statedata():
+#     """Return lists of credit and debt data for each state"""
+#     results = session.query(State_data.name,State_data.score,State_data.Vantage_Score,
+#         State_data.Debt_Income, State_data.Mor_Del, State_data.grade).all()
+
+#     all_states = []
+#     for name, score, vantage, debt_inc, mort_del, grade in results:
+#         states_dict = {}
+#         states_dict["State"] = name
+#         states_dict["Financial_Score"] = score
+#         states_dict["Credit_Score"] = vantage
+#         states_dict["Debt-Income"] = debt_inc
+#         states_dict["Mortg_Delinquency"] = mort_del
+#         states_dict["Ed_Grade"] = grade
+#         all_states.append(states_dict)
+
+#     return jsonify(all_states)
 
 
 @app.route('/complaints')

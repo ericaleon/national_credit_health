@@ -1,8 +1,5 @@
 // Creating map object
-var map = L.map("map", {
-  center: [39.8097343, -98.5556199],
-  zoom: 5
-});
+var map = L.map("map").setView([39.8097343, -98.5556199], 4);
 
 // Adding tile layer
 L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
@@ -12,28 +9,29 @@ L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
   accessToken: API_KEY
 }).addTo(map);
 
-var s_data = '/statedata';
+// d3(new_statedata).then(function(error, response) {  
+//   if (error)
+//     {console.log(error)}
+//   console.log(response);
+//   var response = [response];
+//   var score = response.map(data => data.Financial_Score)
+// });
 
-d3.json(s_data).then(function(response) {
-  console.log(response);
-  var response = [response];
-  var score = response.map(data => data.Financial_Score)
-});
 
 var proxyUrl = 'https://cors-anywhere.herokuapp.com/',
     targetUrl = "https://docs.mapbox.com/help/demos/choropleth-studio-gl/stateData.geojson";
 
 // Function that will determine the color each stte based on score
-function getColor(Financial_Score) {
-    return Financial_Score > 9   ? '#1A5B00' :
-    Financial_Score > 8   ? '#2E9506' :
-    Financial_Score > 7   ? '#4DB027' :
-    Financial_Score > 6   ? '#67D13E' :
-    Financial_Score > 5   ? '#7CE155' :
-    Financial_Score > 4   ? '#9EF37D' :
-    Financial_Score > 3   ? '#D3FAC4' :
-    Financial_Score > 2   ? '#E1FED7' :
-    Financial_Score > 1   ? '#F1FEEC' :
+function getColor(score) {
+    return score.Financial_Score > 9   ? '#1A5B00' :
+    score.Financial_Score > 8   ? '#2E9506' :
+    score.Financial_Score > 7   ? '#4DB027' :
+    score.Financial_Score > 6   ? '#67D13E' :
+    score.Financial_Score > 5   ? '#7CE155' :
+    score.Financial_Score > 4   ? '#9EF37D' :
+    score.Financial_Score > 3   ? '#D3FAC4' :
+    score.Financial_Score > 2   ? '#E1FED7' :
+    score.Financial_Score > 1   ? '#F1FEEC' :
                       '#fffff';
 };
 
@@ -46,7 +44,7 @@ d3.json(proxyUrl + targetUrl, function(data) {
       return {
         color: "white",
         // Call the chooseColor function to decide which color to color each state
-        fillColor: getColor(score),
+        fillColor: getColor(new_statedata),
         fillOpacity: 0.5,
         weight: 1.5
       };
@@ -74,9 +72,26 @@ d3.json(proxyUrl + targetUrl, function(data) {
           map.fitBounds(event.target.getBounds());
         }
       });
+
+      var Financial_Score_pu = [];
+      var Vantage_Score_pu = [];
+
+      Object.keys(new_statedata).forEach(function(k){
+        console.log(k + ' : ' + new_statedata[k]);
+        if (k = "Financial_Score"){
+          Financial_Score_pu.push(new_statedata[k])
+
+        } else if (k = "Vantage_Score"){
+          Vantage_Score_pu
+        }
+
+        
+        score_pop_up.push(new_statedata[k])
+     });
       // Giving each feature a pop-up with information pertinent to it
-      layer.bindPopup('<h3>State Score</h3>' + response.map(data => data.Financial_Score) + '<hr><ul><li> Vantage Score: ' + response.map(data => data.Credit_Score) + "</li><li>Debt/Income Ratio: " + response.map(data => data.Debt-Income) + "</li><li>Delinquency Rate: " + response.map(data => data.Mortg_Delinquency) + "</li><hr><p>Financial Education Grade: " + response.map(data => data.Ed_Grade), {offset: new L.point(10,10)});
+      layer.bindPopup('<h3>State Score:</h3>' + forEach(Financial_Score_pu) + '<hr><ul><li> Vantage Score: ' + forEach(new_statedata.Credit_Score) + "</li><li>Debt/Income Ratio: " + forEach(new_statedata.Debt-Income) + "</li><li>Delinquency Rate: " + forEach(new_statedata.Mortg_Delinquency) + "</li><hr><p>Financial Education Grade: " + forEach(new_statedata.Ed_Grade), {offset: new L.point(10,10)});
     }
+    // layer.bindPopup('<h3>State Score:</h3>' + forEach(new_statedata.Financial_Score) + '<hr><ul><li> Vantage Score: ' +forEach(new_statedata.Credit_Score) + "</li><li>Debt/Income Ratio: " + forEach(new_statedata.Debt-Income) + "</li><li>Delinquency Rate: " + forEach(new_statedata.Mortg_Delinquency) + "</li><hr><p>Financial Education Grade: " + forEach(new_statedata.Ed_Grade), {offset: new L.point(10,10)});
    
   }).addTo(map);
 
