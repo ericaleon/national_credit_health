@@ -56,7 +56,7 @@ def colorize(data):
         elif d["Financial_Score"] > 8:
             values.append("#2E9506")
         elif d["Financial_Score"] > 7:
-            values.append("4DB027")
+            values.append("#4DB027")
         elif d["Financial_Score"] > 6:
             values.append("#67D13E")
         elif d["Financial_Score"] > 5:
