@@ -193,9 +193,12 @@
 </div>
 <script type = text/javascript>
 stateDATA = '{{stateDATA}}';
+score_Color = '{{score_Color}}';
+var scoreColor = score_Color.replace(/&#34;/g, '"')
 var new_statedata = stateDATA.replace(/&#34;/g, '"')
+scoreColor=JSON.parse(scoreColor)
 new_statedata=JSON.parse(new_statedata)
-// console.log(new_statedata);
+console.log(scoreColor);
 </script>
 
 

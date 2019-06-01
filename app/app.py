@@ -42,6 +42,43 @@ app = Flask(__name__)
 
 CORS(app, support_credentials=True)
 
+def colorize(data):
+    # set up dictionary and lists for keys and values
+    c_dict = {}
+    keys = []
+    values = []
+
+    # iterate through data and assign values to applicable list
+    for d in data:
+        keys.append(d["State"])
+        if d["Financial_Score"] > 9:
+            values.append("#1A5B00")
+        elif d["Financial_Score"] > 8:
+            values.append("#2E9506")
+        elif d["Financial_Score"] > 7:
+            values.append("4DB027")
+        elif d["Financial_Score"] > 6:
+            values.append("#67D13E")
+        elif d["Financial_Score"] > 5:
+            values.append("#7CE155")
+        elif d["Financial_Score"] > 4:
+            values.append("#9EF37D")
+        elif d["Financial_Score"] > 3:
+            values.append("#D3FAC4")
+        elif d["Financial_Score"] > 2:
+            values.append("#E1FED7")
+        elif d["Financial_Score"] > 1:
+            values.append("#F1FEEC")
+        else:
+            values.append("#fffff")
+    
+    c_dict = dict(zip(keys, values))
+
+    return c_dict
+    
+
+
+
 @app.route('/')
 def home():
     """Render Home Page."""
@@ -67,7 +104,11 @@ def home():
 
     all_dict = {"States": states_list}
     stateDATA = json.dumps(all_dict, sort_keys=False)
-    return render_template("index.html", stateDATA = stateDATA)
+
+    score_Color = json.dumps((colorize(states_list)), sort_keys=False)
+   
+    return render_template("index.html", stateDATA = stateDATA, score_Color = score_Color)
+    
 
 
 @app.route('/statedata')
@@ -96,47 +137,52 @@ def statedata():
     # return  stateDATA
 
 
-@app.route('/complaints')
-def complaints():
-    """Return consumer financial protection bureau complaint data"""
-    # **Query for Complaint Counts by Type for each State**
-    # SELECT abbr, Product, COUNT(Complaint_ID)
-    # FROM complaints
-    # GROUP BY abbr, Product
-    # ORDER BY abbr ASC;
+# @app.route('/complaints')
+# def complaints():
+#     """Return consumer financial protection bureau complaint data"""
+#     # **mySQL Query for Complaint Counts by Type for each State**
+#     # SELECT abbr, Product, COUNT(Complaint_ID)
+#     # FROM complaints
+#     # GROUP BY abbr, Product
+#     # ORDER BY abbr ASC;
+
+#     # **Main mySQL Query**
+#     # SELECT complaint_full.abbr, full_state_data.Vantage_Score, COUNT(complaint_full.Complaint_ID) as `Total Complaints`, COUNT(complaint_full.Complaint_ID)*10000/full_state_data.state_population as `complaints per 10,000`, full_state_data.state_population
+#     # FROM complaint_full
+#     # INNER JOIN full_state_data
+#     # ON complaint_full.abbr = full_state_data.abbr
+#     # GROUP BY complaint_full.abbr;
+
+#     # sub-query for Complaint count by Product Type
+#     subq = session.query(Complaints.abbr, Complaints.Product, func.count(Complaints.Product).\
+#         group_by(Complaints.abbr, Complaints.Product).order_by(Complaints.abbr.asc()).all()
     
-    # **Query for Total Complaints by State**
-    # SELECT abbr, COUNT(Complaint_ID)
-    # FROM complaints
-    # GROUP BY abbr
-    # ORDER BY abbr ASC;
+#     # Main query to capture State abbreviation, Credit Score, Total Complaints, Complaints per 10,000 people
+#     query = session.query(Complaints.abbr, State_data.Vantage_Score, Complaints.state_population, func.count(Complaints.Complaint_ID).label("Total Complaints"), (func.count(Complaints.Complaint_ID)*10000/int(State_data.state_population)).label("Complaints per 10,000 People")).\
+#         innerjoin(Complaints, State_data, Complaints.abbr == State_data.abbr).\
+#             group_by(Complaints.abbr).all()
 
-    # results = session.query(Complaints.Product, func.count(Complaints.Product)).\
-    #     outerjoin(State_lookup.abbr, Complaints.abbr == State_lookup.abbr).\
-    #     group_by(Complaints.abbr).all()
-    subq = session.query(Complaints.abbr, Complaints.Product, func.count(Complaints.Product)).group_by(Complaints.abbr).all()
-   
-    # create lists for results in subquery
-    state = [sub[0] for sub in subq]
-    product = [sub[1] for sub in subq]
-    count = [int(sub[2]) for sub in subq]
+#     # create lists for results in subquery - ** below code still in progress **
+#     state = [sub[0] for sub in subq]
+#     product = [sub[1] for sub in subq]
+#     count = [int(sub[2]) for sub in subq]
 
-    data = {
-        "State": state,
-        "Product": product,
-        "Count": count
-    }
+#     data = {
+#         "State": state,
+#         "Product": product,
+#         "Count": count
+#     }
 
-    # generate dictionary
-    complaint_dict = [{
-        # "State": state,
-        # "Population": pop,
-        # "Avg. Credit Score": avg_score,
-        # "Complaint Count": count,
-        # "Count by Type": prod_count
-    }]
+#     # generate dictionary
+#     complaint_dict = [{
+#         # "State": state,
+#         # "Population": pop,
+#         # "Avg. Credit Score": avg_score,
+#         # "Complaint Count": count,
+#         # "Count by Type": prod_count
+#     }]
 
-    return jsonify(data)
+#     return jsonify(data)
 
 if __name__ == '__main__':
     app.run(debug=True)
