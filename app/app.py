@@ -9,7 +9,8 @@ import json
 from flask import (
     Flask,
     render_template,
-    jsonify)
+    jsonify,
+    make_response)
 
 from flask_sqlalchemy import SQLAlchemy
 import os
@@ -45,42 +46,54 @@ CORS(app, support_credentials=True)
 def home():
     """Render Home Page."""
     """Return lists of credit and debt data for each state"""
+    # with open('static/js/state_data_part.json') as f:
+    #     geoJ = json.load(f)
+    # stateDATA = json.dumps(geoJ, sort_keys=False)
+    # # print(stateDATA)
+    # return render_template("index.html", stateDATA = stateDATA)
     results = session.query(State_data.name,State_data.score,State_data.Vantage_Score, State_data.Debt_Income, State_data.Mor_Del, State_data.grade).all()
 
-    all_states = []
+    all_dict = {}
+    states_list = []
     for name, score, vantage, debt_inc, mort_del, grade in results:
         states_dict = {}
         states_dict["State"] = name
         states_dict["Financial_Score"] = score
         states_dict["Credit_Score"] = vantage
-        states_dict["Debt-Income"] = debt_inc
+        states_dict["Debt_Income"] = debt_inc
         states_dict["Mortg_Delinquency"] = mort_del
         states_dict["Ed_Grade"] = grade
-        all_states.append(states_dict)
+        states_list.append(states_dict)
 
-    stateDATA = json.dumps(all_states)
-    # state_data = json.loads(stateDATA)
+    all_dict = {"States": states_list}
+    stateDATA = json.dumps(all_dict, sort_keys=False)
     return render_template("index.html", stateDATA = stateDATA)
 
 
-# @app.route('/statedata')
-# def statedata():
-#     """Return lists of credit and debt data for each state"""
-#     results = session.query(State_data.name,State_data.score,State_data.Vantage_Score,
-#         State_data.Debt_Income, State_data.Mor_Del, State_data.grade).all()
+@app.route('/statedata')
+def statedata():
+    """Return lists of credit and debt data for each state"""
+    with open('static/js/state_data_part.json') as f:
+        geoJ = json.load(f)
+    stateDATA = json.dumps(geoJ, sort_keys=False)
+    return (stateDATA)
+    # results = session.query(State_data.name,State_data.score,State_data.Vantage_Score,
+    #     State_data.Debt_Income, State_data.Mor_Del, State_data.grade).all()
 
-#     all_states = []
-#     for name, score, vantage, debt_inc, mort_del, grade in results:
-#         states_dict = {}
-#         states_dict["State"] = name
-#         states_dict["Financial_Score"] = score
-#         states_dict["Credit_Score"] = vantage
-#         states_dict["Debt-Income"] = debt_inc
-#         states_dict["Mortg_Delinquency"] = mort_del
-#         states_dict["Ed_Grade"] = grade
-#         all_states.append(states_dict)
+    # all_states = []
+    # for name, score, vantage, debt_inc, mort_del, grade in results:
+    #     states_dict = {}
+    #     states_dict["State"] = name
+    #     states_dict["Financial_Score"] = score
+    #     states_dict["Credit_Score"] = vantage
+    #     states_dict["Debt-Income"] = debt_inc
+    #     states_dict["Mortg_Delinquency"] = mort_del
+    #     states_dict["Ed_Grade"] = grade
+    #     all_states.append(states_dict)
 
-#     return jsonify(all_states)
+    # stateDATA = jsonify(all_states)
+    
+    # return  stateDATA
 
 
 @app.route('/complaints')

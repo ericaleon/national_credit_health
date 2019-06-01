@@ -24,6 +24,9 @@
     <!-- Our CSS -->
     <link rel="stylesheet" type="text/css" href="../static/css/style.css">
 
+    <!-- JQuery CDN-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
 
 </head>
 
@@ -85,7 +88,7 @@
       ];
       
       // set the dimensions and margins of the graph
-  var margin = {top: 40, right: 400, bottom: 20, left: 350},
+  var margin = {top: 40, right: 400, bottom: 20, left: 450},
       width = 900,
       height = 500 - margin.top - margin.bottom;
   // append the svg object to the body of the page
@@ -191,10 +194,10 @@
 <script type = text/javascript>
 stateDATA = '{{stateDATA}}';
 var new_statedata = stateDATA.replace(/&#34;/g, '"')
-console.log(new_statedata);
+new_statedata=JSON.parse(new_statedata)
+// console.log(new_statedata);
 </script>
 
-<!-- &#34;Mortg_Delinquency&#34;: 0.845 -->
 
   <script type="text/javascript" src="../static/js/config.js"></script>
   <script type="text/javascript" src="../static/js/logic_choropleth.js"></script>
@@ -206,3 +209,4 @@ console.log(new_statedata);
 </body>
 
 </html>
+
