@@ -9,16 +9,7 @@ L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
   accessToken: API_KEY
 }).addTo(map);
 
-// d3(new_statedata).then(function(error, response) {  
-//   if (error)
-//     {console.log(error)}
-//   console.log(response);
-//   var response = [response];
-//   var score = response.map(data => data.Financial_Score)
-// });
 
-// https://cors-anywhere.herokuapp.com/"+
-// var proxyUrl = "static/js/state_data_full.json";
 var proxyUrl = "https://cors-anywhere.herokuapp.com/https://docs.mapbox.com/help/demos/choropleth-studio-gl/stateData.geojson";
 console.log(proxyUrl);
 
@@ -61,10 +52,7 @@ console.log(proxyUrl);
 //   "fillOpacity" : 0.5,
 //   "weight": 1.5
 // };
-var testColors = [{
-  "Alabama" : "red",
-  "Alaska" : "blue"
-}]
+
 // Grabbing our GeoJSON data..
 d3.json(proxyUrl, function(data) {
       // Creating a geoJSON layer with the retrieved data
@@ -73,7 +61,7 @@ d3.json(proxyUrl, function(data) {
     // Style each feature
     style:  
         function(data){
-          console.log(data)
+          // console.log(data)
             switch (data.properties.name) {
               case "Alabama" : return {color:scoreColor["Alabama"]};
               case "Alaska": return {color:scoreColor["Alaska"]};
@@ -157,8 +145,8 @@ d3.json(proxyUrl, function(data) {
       // console.log(new_statedata.States[0].Financial_Score);
       // Giving each feature a pop-up with information pertinent to it
       // layer.bindPopup('<h3>State Score:</h3>' + forEach(Financial_Score_pu) + '<hr><ul><li> Vantage Score: ' + forEach(new_statedata.Vantage_Score_pu) + "</li><li>Debt/Income Ratio: " + forEach(new_statedata.Debt_Income_pu) + "</li><li>Delinquency Rate: " + forEach(new_statedata.Mortg_Delinquency_pu) + "</li><hr><p>Financial Education Grade: " + forEach(new_statedata.Ed_Grade_pu), {offset: new L.point(10,10)});
-    
-    layer.bindPopup('<h3>State Score:</h3>' + '<hr><ul><li> Vantage Score: ' + "</li><li>Debt/Income Ratio: " + "</li><li>Delinquency Rate: " + "</li><hr><p>Financial Education Grade: ", {offset: new L.point(10,10)});
+    console.log(new_statedata.States[0].Ed_Grade)
+    layer.bindPopup('<h3>State Score: ' + new_statedata.States[0].Financial_Score + '</h3><hr><ul><li> Vantage Score: ' + new_statedata.States[0].Credit_Score + "</li><li>Debt/Income Ratio: " + new_statedata.States[0].Debt_Income +"%</li><li>Delinquency Rate: " + new_statedata.States[0].Mortg_Delinquency + "%</li><hr><p>Financial Education Grade: " + new_statedata.States[0].Ed_Grade, {offset: new L.point(10,10)});
     }    
   }).addTo(map);
 

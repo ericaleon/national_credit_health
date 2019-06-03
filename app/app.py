@@ -51,23 +51,23 @@ def colorize(data):
     # iterate through data and assign values to applicable list
     for d in data:
         keys.append(d["State"])
-        if d["Financial_Score"] > 9:
+        if (d["Financial_Score"]) == 10:
             values.append("#1A5B00")
-        elif d["Financial_Score"] > 8:
+        elif d["Financial_Score"] >= 9:
             values.append("#2E9506")
-        elif d["Financial_Score"] > 7:
+        elif d["Financial_Score"] >= 8:
             values.append("#4DB027")
-        elif d["Financial_Score"] > 6:
+        elif d["Financial_Score"] >= 7:
             values.append("#67D13E")
-        elif d["Financial_Score"] > 5:
+        elif d["Financial_Score"] >= 6:
             values.append("#7CE155")
-        elif d["Financial_Score"] > 4:
+        elif d["Financial_Score"] >= 5:
             values.append("#9EF37D")
-        elif d["Financial_Score"] > 3:
+        elif d["Financial_Score"] >= 4:
             values.append("#D3FAC4")
-        elif d["Financial_Score"] > 2:
+        elif d["Financial_Score"] >= 3:
             values.append("#E1FED7")
-        elif d["Financial_Score"] > 1:
+        elif d["Financial_Score"] >= 2:
             values.append("#F1FEEC")
         else:
             values.append("#fffff")
