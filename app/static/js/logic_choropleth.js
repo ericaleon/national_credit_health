@@ -11,47 +11,8 @@ L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 
 
 var proxyUrl = "https://cors-anywhere.herokuapp.com/https://docs.mapbox.com/help/demos/choropleth-studio-gl/stateData.geojson";
-console.log(proxyUrl);
+// console.log(proxyUrl);
 
-// Function that will determine the color each stte based on score
-// function getColor(score) {
-//   // console.log(score[0].Financial_Score)
-//   for (var i = 0; i < score.length; i ++) {
-//     console.log(i);
-//     if (score[i].Financial_Score > 9)   {
-//       return '#1A5B00'}
-//     else if (score[i].Financial_Score > 8) {
-//       return '#2E9506' }
-//     else if (score[i].Financial_Score > 7) {
-//       return '#4DB027'}
-//     else if (score[i].Financial_Score > 6) {
-//       return '#67D13E'}
-//     else if (score[i].Financial_Score > 5) {
-//       return '#7CE155'}
-//     else if (score[i].Financial_Score > 4) {
-//       return '#9EF37D' }
-//     else if (score[i].Financial_Score > 3) {
-//       return '#D3FAC4'}
-//     else if  (score[i].Financial_Score > 2) {
-//       return '#E1FED7'}
-//     else if (score[i].Financial_Score > 1) {
-//       return '#F1FEEC'}
-//     else {return '#fffff'};
-// }};
-
-
-// var arr=[];
-// for (var i = 0; i < new_statedata.States.length; i ++) {
-//   arr.push(getColor(new_statedata.States[i]))};
-// console.log(arr);
-
-
-// var myStyle = {
-//   'color' : 'orange',
-//   'fillColor' : getColor(new_statedata.States),
-//   "fillOpacity" : 0.5,
-//   "weight": 1.5
-// };
 
 // Grabbing our GeoJSON data..
 d3.json(proxyUrl, function(data) {
@@ -142,11 +103,7 @@ d3.json(proxyUrl, function(data) {
         }
       });
     
-      // console.log(new_statedata.States[0].Financial_Score);
-      // Giving each feature a pop-up with information pertinent to it
-      // layer.bindPopup('<h3>State Score:</h3>' + forEach(Financial_Score_pu) + '<hr><ul><li> Vantage Score: ' + forEach(new_statedata.Vantage_Score_pu) + "</li><li>Debt/Income Ratio: " + forEach(new_statedata.Debt_Income_pu) + "</li><li>Delinquency Rate: " + forEach(new_statedata.Mortg_Delinquency_pu) + "</li><hr><p>Financial Education Grade: " + forEach(new_statedata.Ed_Grade_pu), {offset: new L.point(10,10)});
-    console.log(new_statedata.States[0].Ed_Grade)
-    layer.bindPopup('<h3>State Score: ' + new_statedata.States[0].Financial_Score + '</h3><hr><ul><li> Vantage Score: ' + new_statedata.States[0].Credit_Score + "</li><li>Debt/Income Ratio: " + new_statedata.States[0].Debt_Income +"%</li><li>Delinquency Rate: " + new_statedata.States[0].Mortg_Delinquency + "%</li><hr><p>Financial Education Grade: " + new_statedata.States[0].Ed_Grade, {offset: new L.point(10,10)});
+     
     }    
   }).addTo(map);
 
@@ -176,4 +133,23 @@ d3.json(proxyUrl, function(data) {
       // Adding legend to the map
       legend.addTo(map);
 });
-console.log()
+
+
+for (var i=0; i<new_statedata.States.length; i++) {
+  
+  var lon = new_statedata.States[i].longitude;
+  var lat = new_statedata.States[i].latitude;
+  var fin_score = new_statedata.States[i].Financial_Score
+  var credit = new_statedata.States[i].Credit_Score;
+  var debt = new_statedata.States[i].Debt_Income
+  var mortgage = new_statedata.States[i].Mortg_Delinquency;
+  var edu = new_statedata.States[i].Ed_Grade;
+  var state = new_statedata.States[i].State;
+  console.log(edu);
+   var markerLocation = new L.LatLng(lat, lon);
+   var marker = new L.Marker(markerLocation);
+   map.addLayer(marker);
+
+   marker.bindPopup('<h2>' + state + '</h2><hr><h3>State Score: ' + fin_score + '</h3><hr><ul><li> Vantage Score: ' + credit + "</li><li>Debt/Income Ratio: " + debt +"%</li><li>Delinquency Rate: " + mortgage + "%</li><hr><p>Financial Education Grade: " + edu, {offset: new L.point(10,10)});
+
+}
