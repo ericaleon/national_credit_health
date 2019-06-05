@@ -108,81 +108,58 @@ def home():
     score_Color = json.dumps((colorize(states_list)), sort_keys=False)
    
     return render_template("index.html", stateDATA = stateDATA, score_Color = score_Color)
-    
+ 
+@app.route('/complaints')
+def complaints():
+    """Return consumer financial protection bureau complaint data"""
 
+    # query complaints and state data tables
+    sel = [
+        Complaints.abbr, 
+        State_data.Vantage_Score,
+        State_data.state_population, 
+        Complaints.Product,
+        func.count(Complaints.Complaint_ID),
+        100000.0*func.count(Complaints.Complaint_ID)/State_data.state_population
+        ]
+    results = session.query(*sel).join(State_data, Complaints.abbr == State_data.abbr).\
+        group_by(State_data.abbr, Complaints.Product).order_by(Complaints.abbr.asc())
 
-@app.route('/statedata')
-def statedata():
-    """Return lists of credit and debt data for each state"""
-    with open('static/js/state_data_part.json') as f:
-        geoJ = json.load(f)
-    stateDATA = json.dumps(geoJ, sort_keys=False)
-    return (stateDATA)
-    # results = session.query(State_data.name,State_data.score,State_data.Vantage_Score,
-    #     State_data.Debt_Income, State_data.Mor_Del, State_data.grade).all()
+    iter_results = iter(results)
 
-    # all_states = []
-    # for name, score, vantage, debt_inc, mort_del, grade in results:
-    #     states_dict = {}
-    #     states_dict["State"] = name
-    #     states_dict["Financial_Score"] = score
-    #     states_dict["Credit_Score"] = vantage
-    #     states_dict["Debt-Income"] = debt_inc
-    #     states_dict["Mortg_Delinquency"] = mort_del
-    #     states_dict["Ed_Grade"] = grade
-    #     all_states.append(states_dict)
+    # create & build nested dictionaries and lists for json
+    main_dict = {}
+    states_list = []   
+    for abbr, vantage, population, product, comptype_count, comptype_capita in results:
+        state_dict = {} 
+            if i == 0 or abbr[i] != abbr[i-1]:
+                state_dict["State"] = abbr
+                state_dict["Avg_Credit_Score"] = vantage
+                state_dict["Population"] = population
+                complaints_list = []
+                complaint_dict = {}
+                complaint_dict["Product"] = product
+                complaint_dict["Complaint_Count"] = comptype_count
+                complaint_dict["Complaints_per_Capita"] = comptype_capita
+                complaints_list.append(complaint_dict)
+            elif abbr[i] == abbr[i+1]:
+                complaint_dict = {}
+                complaint_dict["Product"] = product
+                complaint_dict["Complaint_Count"] = comptype_count
+                complaint_dict["Complaints_per_Capita"] = comptype_capita
+                complaints_list.append(complaint_dict)
+            else:
+                complaint_dict = {}
+                complaint_dict["Product"] = product
+                complaint_dict["Complaint_Count"] = comptype_count
+                complaint_dict["Complaints_per_Capita"] = comptype_capita
+                complaints_list.append(complaint_dict)
+                state_dict["Complaints_by_Type"] = complaints_list
+                states_list.append(state_dict)
 
-    # stateDATA = jsonify(all_states)
-    
-    # return  stateDATA
+    main_dict["States_Complaints"] = states_list
 
-
-# @app.route('/complaints')
-# def complaints():
-    # """Return consumer financial protection bureau complaint data"""
-    # **mySQL Query for Complaint Counts by Type for each State**
-    # SELECT abbr, Product, COUNT(Complaint_ID)
-    # FROM complaints
-    # GROUP BY abbr, Product
-    # ORDER BY abbr ASC;
-
-    # **Main mySQL Query**
-    # SELECT complaint_full.abbr, full_state_data.Vantage_Score, COUNT(complaint_full.Complaint_ID) as `Total Complaints`, COUNT(complaint_full.Complaint_ID)*10000/full_state_data.state_population as `complaints per 10,000`, full_state_data.state_population
-    # FROM complaint_full
-    # INNER JOIN full_state_data
-    # ON complaint_full.abbr = full_state_data.abbr
-    # GROUP BY complaint_full.abbr;
-
-    # sub-query for Complaint count by Product Type
-#     subq = session.query(Complaints.abbr, Complaints.Product, func.count(Complaints.Product).\
-#         group_by(Complaints.abbr, Complaints.Product).order_by(Complaints.abbr.asc()).all()
-    
-    # Main query to capture State abbreviation, Credit Score, Total Complaints, Complaints per 10,000 people
-#     query = session.query(Complaints.abbr, State_data.Vantage_Score, Complaints.state_population, func.count(Complaints.Complaint_ID).label("Total Complaints"), (func.count(Complaints.Complaint_ID)*10000/int(State_data.state_population)).label("Complaints per 10,000 People")).\
-#         innerjoin(Complaints, State_data, Complaints.abbr == State_data.abbr).\
-#             group_by(Complaints.abbr).all()
-
-#     # create lists for results in subquery - ** below code still in progress **
-#     state = [sub[0] for sub in subq]
-#     product = [sub[1] for sub in subq]
-#     count = [int(sub[2]) for sub in subq]
-
-#     data = {
-#         "State": state,
-#         "Product": product,
-#         "Count": count
-#     }
-
-#     # generate dictionary
-#     complaint_dict = [{
-#         # "State": state,
-#         # "Population": pop,
-#         # "Avg. Credit Score": avg_score,
-#         # "Complaint Count": count,
-#         # "Count by Type": prod_count
-#     }]
-
-#     return jsonify(data)
+    return jsonify(main_dict)
 
 if __name__ == '__main__':
     app.run(debug=True)

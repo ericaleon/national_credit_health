@@ -83,7 +83,6 @@ def colorize(data):
     return c_dict
     
 
-
 @app.route('/')
 def home():
     """Render Home Page."""
@@ -136,55 +135,38 @@ def complaints():
     states_list = []   
     for abbr, vantage, population, product, comptype_count, comptype_capita in results:
         state_dict = {} 
-            if i == 0 or abbr[i] != abbr[i-1]:
-                state_dict["State"] = abbr
-                state_dict["Avg_Credit_Score"] = vantage
-                state_dict["Population"] = population
-                complaints_list = []
-                complaint_dict = {}
-                complaint_dict["Product"] = product
-                complaint_dict["Complaint_Count"] = comptype_count
-                complaint_dict["Complaints_per_Capita"] = comptype_capita
-                complaints_list.append(complaint_dict)
-            elif abbr[i] == abbr[i+1]:
-                complaint_dict = {}
-                complaint_dict["Product"] = product
-                complaint_dict["Complaint_Count"] = comptype_count
-                complaint_dict["Complaints_per_Capita"] = comptype_capita
-                complaints_list.append(complaint_dict)
-            else:
-                complaint_dict = {}
-                complaint_dict["Product"] = product
-                complaint_dict["Complaint_Count"] = comptype_count
-                complaint_dict["Complaints_per_Capita"] = comptype_capita
-                complaints_list.append(complaint_dict)
-                state_dict["Complaints_by_Type"] = complaints_list
-                states_list.append(state_dict)
+        if i == 0 or abbr[i] != abbr[i-1]:
+            state_dict["State"] = abbr
+            state_dict["Avg_Credit_Score"] = vantage
+            state_dict["Population"] = population
+            complaints_list = []
+            complaint_dict = {}
+            complaint_dict["Product"] = product
+            complaint_dict["Complaint_Count"] = comptype_count
+            complaint_dict["Complaints_per_Capita"] = comptype_capita
+            complaints_list.append(complaint_dict)
+        elif abbr[i] == abbr[i+1]:
+            complaint_dict = {}
+            complaint_dict["Product"] = product
+            complaint_dict["Complaint_Count"] = comptype_count
+            complaint_dict["Complaints_per_Capita"] = comptype_capita
+            complaints_list.append(complaint_dict)
+        else:
+            complaint_dict = {}
+            complaint_dict["Product"] = product
+            complaint_dict["Complaint_Count"] = comptype_count
+            complaint_dict["Complaints_per_Capita"] = comptype_capita
+            complaints_list.append(complaint_dict)
+            state_dict["Complaints_by_Type"] = complaints_list
+            states_list.append(state_dict)
 
     main_dict["States_Complaints"] = states_list
 
     return jsonify(main_dict)
     
-
-    # set up lists and dictionaries for json 
+@app.route('/ProjectDiscussion')
+def DiscussionPage():
+    return render_template("discussion.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-    # sub-query for Complaint count by Product Type
-#     subq = session.query(Complaints.abbr, Complaints.Product, func.count(Complaints.Product).\
-#         group_by(Complaints.abbr, Complaints.Product).order_by(Complaints.abbr.asc()).all()
-    
-    # Main query to capture State abbreviation, Credit Score, Total Complaints, Complaints per 10,000 people
-#     query = session.query(Complaints.abbr, State_data.Vantage_Score, Complaints.state_population, func.count(Complaints.Complaint_ID).label("Total Complaints"), (func.count(Complaints.Complaint_ID)*10000/int(State_data.state_population)).label("Complaints per 10,000 People")).\
-#         innerjoin(Complaints, State_data, Complaints.abbr == State_data.abbr).\
-#             group_by(Complaints.abbr).all()
-
-# SELECT complaint_full.abbr, full_state_data.Vantage_Score, full_state_data.state_population, 
-# 	complaint_full.Product,	COUNT(complaint_full.Complaint_ID) as `Complaint count`, 
-# 	COUNT(complaint_full.Complaint_ID)*100000.0/full_state_data.state_population as `complaints per 100,000`
-# FROM complaint_full
-# INNER JOIN full_state_data
-# ON complaint_full.abbr = full_state_data.abbr
-# GROUP BY complaint_full.abbr, complaint_full.Product
-# ORDER BY complaint_full.abbr ASC;
