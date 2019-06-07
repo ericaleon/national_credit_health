@@ -3,6 +3,7 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
+import decimal
 
 import json
 from json import dumps
@@ -122,48 +123,29 @@ def complaints():
         Complaints.abbr, 
         State_data.Vantage_Score,
         State_data.state_population, 
-        Complaints.Product,
-        func.count(Complaints.Complaint_ID),
-        100000.0*func.count(Complaints.Complaint_ID)/State_data.state_population
+        func.count(Complaints.Product),
+        100000.0*func.count(Complaints.Product)/State_data.state_population
         ]
     results = session.query(*sel).join(State_data, Complaints.abbr == State_data.abbr).\
-        group_by(State_data.abbr, Complaints.Product).order_by(Complaints.abbr.asc())
-
-    iter_results = iter(results)
+        filter(Complaints.Product=="Credit reporting").group_by(State_data.abbr).\
+        order_by(Complaints.abbr.asc())
 
     main_dict = {}
     states_list = []   
-    for abbr, vantage, population, product, comptype_count, comptype_capita in results:
+    for abbr, vantage, population, comp_count, comp_capita in results:
         state_dict = {} 
-        if i == 0 or abbr[i] != abbr[i-1]:
-            state_dict["State"] = abbr
-            state_dict["Avg_Credit_Score"] = vantage
-            state_dict["Population"] = population
-            complaints_list = []
-            complaint_dict = {}
-            complaint_dict["Product"] = product
-            complaint_dict["Complaint_Count"] = comptype_count
-            complaint_dict["Complaints_per_Capita"] = comptype_capita
-            complaints_list.append(complaint_dict)
-        elif abbr[i] == abbr[i+1]:
-            complaint_dict = {}
-            complaint_dict["Product"] = product
-            complaint_dict["Complaint_Count"] = comptype_count
-            complaint_dict["Complaints_per_Capita"] = comptype_capita
-            complaints_list.append(complaint_dict)
-        else:
-            complaint_dict = {}
-            complaint_dict["Product"] = product
-            complaint_dict["Complaint_Count"] = comptype_count
-            complaint_dict["Complaints_per_Capita"] = comptype_capita
-            complaints_list.append(complaint_dict)
-            state_dict["Complaints_by_Type"] = complaints_list
-            states_list.append(state_dict)
+        state_dict["State"] = abbr
+        state_dict["Avg_Credit_Score"] = vantage
+        state_dict["Population"] = population
+        state_dict["Credit Reporting Complaints"] = comp_count
+        state_dict["Complaints_per_Capita"] = comp_capita
+        states_list.append(state_dict)
 
     main_dict["States_Complaints"] = states_list
 
     return jsonify(main_dict)
     
+
 @app.route('/ProjectDiscussion')
 def DiscussionPage():
     return render_template("discussion.html")
