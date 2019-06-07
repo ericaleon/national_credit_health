@@ -134,34 +134,39 @@ def complaints():
     states_list = []   
     for abbr, vantage, population, product, comptype_count, comptype_capita in results:
         state_dict = {} 
-            if i == 0 or abbr[i] != abbr[i-1]:
-                state_dict["State"] = abbr
-                state_dict["Avg_Credit_Score"] = vantage
-                state_dict["Population"] = population
-                complaints_list = []
-                complaint_dict = {}
-                complaint_dict["Product"] = product
-                complaint_dict["Complaint_Count"] = comptype_count
-                complaint_dict["Complaints_per_Capita"] = comptype_capita
-                complaints_list.append(complaint_dict)
-            elif abbr[i] == abbr[i+1]:
-                complaint_dict = {}
-                complaint_dict["Product"] = product
-                complaint_dict["Complaint_Count"] = comptype_count
-                complaint_dict["Complaints_per_Capita"] = comptype_capita
-                complaints_list.append(complaint_dict)
-            else:
-                complaint_dict = {}
-                complaint_dict["Product"] = product
-                complaint_dict["Complaint_Count"] = comptype_count
-                complaint_dict["Complaints_per_Capita"] = comptype_capita
-                complaints_list.append(complaint_dict)
-                state_dict["Complaints_by_Type"] = complaints_list
-                states_list.append(state_dict)
+        if i == 0 or abbr[i] != abbr[i-1]:
+            state_dict["State"] = abbr
+            state_dict["Avg_Credit_Score"] = vantage
+            state_dict["Population"] = population
+            complaints_list = []
+            complaint_dict = {}
+            complaint_dict["Product"] = product
+            complaint_dict["Complaint_Count"] = comptype_count
+            complaint_dict["Complaints_per_Capita"] = comptype_capita
+            complaints_list.append(complaint_dict)
+        elif abbr[i] == abbr[i+1]:
+            complaint_dict = {}
+            complaint_dict["Product"] = product
+            complaint_dict["Complaint_Count"] = comptype_count
+            complaint_dict["Complaints_per_Capita"] = comptype_capita
+            complaints_list.append(complaint_dict)
+        else:
+            complaint_dict = {}
+            complaint_dict["Product"] = product
+            complaint_dict["Complaint_Count"] = comptype_count
+            complaint_dict["Complaints_per_Capita"] = comptype_capita
+            complaints_list.append(complaint_dict)
+            state_dict["Complaints_by_Type"] = complaints_list
+            states_list.append(state_dict)
 
     main_dict["States_Complaints"] = states_list
 
     return jsonify(main_dict)
+
+@app.route('/about')
+def about():
+
+    return render_template("index2.html")
 
 if __name__ == '__main__':
     app.run(debug=True)

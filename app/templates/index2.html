@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>About UCF BC Project3</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!-- Leaflet CSS & JS-->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" -->
+    <!-- integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" -->
+    <!-- crossorigin=""/> -->
+    <!-- <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js" -->
+    <!-- integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q==" -->
+    <!-- crossorigin=""></script> -->
+
+    <!-- d3 JavaScript -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.2/d3.js"></script> -->
+
+    <!-- Leaflet-Choropleth JavaScript -->
+    <!-- <script type="text/javascript" src="../static/js/choropleth.js"></script> -->
+
+    <!-- Our CSS -->
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+
+    <!-- JQuery CDN-->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script> -->
+
+
+</head>
+
+<body>
+  <div class="jumbotron jumbotron-fluid">
+    <div class=".container-fluid">
+      <!-- <img src="{{url_for('static',filename='img/giphy.gif')}}" alt="Debt" style="display:block; margin-left:auto; margin-right:auto"> -->
+      <h1 class="display-4" style="text-align: center"><a href = "/">National Credit Health</a></h1>
+      <h4 style="text-align: center">by LaShanti, Erica, Felicia, & Emily</h4>
+    </div>
+  </div>
+
+  <div class="col-sm-12 col-lg-12">
+      <div class="container-fluid">
+          <h1 style="text-align: center">Data Collection</h1>
+          <hr style="width:30%">
+          <h4 style="text-align: center; width: 75%; margin-left:auto; margin-right:auto; padding-bottom: 12px">This SVG chart was created with data scrapped from <a href="https://www.valuepenguin.com/average-credit-card-debt">ValuePenguin.</a> 
+            <br>
+          We used mulitple x axes to allow users to visualize how both income and age effect the nation's credit card debt.
+          </h4>             
+      </div>
+  </div>
+
+  <img src="../static/img/CCdebt.gif" alt="Debt" style="display:block; margin-left:auto; margin-right:auto">
+  
+<div class="col-sm-12 col-lg-12">
+  <div class="container-fluid">
+      <h1 style="text-align: center; margin-top: 50px">Choropleth Map</h1>
+      <hr style="width:30%">
+      <h4 style="text-align: justify; width: 75%; margin-left:auto; margin-right:auto">In this visualization, we gathered data from multiple sources, including Experian, consumerfinance.gov, and 
+          <br>
+          <br>
+          The data collected was cleaned and a sqlite database was created to refer to in our calculations. We then binned the average state records for credit score, debt to income ratio, and >90 days delinquent on mortgage loans. Based on these binned scores per state, we were able to assign an overall score per state (1-10) for financial health. In addition, we wanted users to be able to consider Financial education in each state and how it may or may not contribute to the overall score. Included in the state information, we've chosen to display the grade assigned to that state based on their graduation requirements regarding financial education. 
+      </h4>           
+  </div>
+</div>
+
+<img src="../static/img/CHealth.gif" alt="Debt" style="display:block; margin-left:auto; margin-right:auto">
+
+<div class="col-sm-12 col-lg-12">
+    <div class="container-fluid">
+        <h1 style="text-align: center; margin-top: 50px">D3 Bubble Plot</h1>
+        <hr style="width:30%">
+        <h4 style="text-align: justify; width: 75%; margin-left:auto; margin-right:auto">The last area we wanted users to explore is the potential errors in the current credit reporting system.
+            After gathering and cleaning data from the Consumer Financial Protection Bureau on complaints from 2017 for debt collection, payday lenders, vehicle loans, mortgage loans, student loans, credit reporting and credit cards
+            we created an interactive graph to show what lending services received the most complaints and which states show the highest number of complaints. This data may be the hardest to extrapolate from since
+            participation in the program is limited to those aware of it and therefore may not be an accurate representation of consumer complaints.   
+        </h4>          
+    </div>
+</div>
+
+<img src="../static/img/CCdebt.gif" alt="Debt" style="display:block; margin-left:auto; margin-right:auto">
+
+<!-- <script type = text/javascript>
+stateDATA = '{{stateDATA}}';
+score_Color = '{{score_Color}}';
+var scoreColor = score_Color.replace(/&#34;/g, '"')
+var new_statedata = stateDATA.replace(/&#34;/g, '"')
+scoreColor=JSON.parse(scoreColor)
+new_statedata=JSON.parse(new_statedata)
+console.log(new_statedata.States); -->
+</script>
+
+</body>
+
+</html>
+
