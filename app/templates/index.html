@@ -89,7 +89,7 @@
       ];
       
       // set the dimensions and margins of the graph
-  var margin = {top: 40, right: 400, bottom: 20, left: 550},
+  var margin = {top: 40, right: 400, bottom: 20, left: 400},
       width = 800,
       height = 500 - margin.top - margin.bottom;
   // append the svg object to the body of the page
@@ -214,12 +214,13 @@ new_statedata=JSON.parse(new_statedata)
 
 <script type="text/javascript" src="../static/js/config.js"></script>	
 <script type="text/javascript" src="../static/js/logic_choropleth.js"></script>	
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
 <script type="text/javascript" src="../static/js/logic_bubble.js"></script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>	
 <!-- <script src="https://cdn.plot.ly/plotly-1.31.2.min.js"></script> -->  
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script> -->
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script src="{{ url_for('static', filename='js/logic_bubble.js') }}"></script>
+<!-- <script src="{{ url_for('static', filename='js/logic_bubble.js') }}"></script> -->
 </body>
 
 </html>

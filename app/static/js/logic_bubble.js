@@ -1,18 +1,29 @@
+// function bubbleSizer(arr) {
+//   console.log("bubblesizer function called")
+//   var myArr = []
+//   arr.forEach(element => {
+//     myArr.push(element/50000);
+//   return myArr;
+//   });
+//   console.log(myArr)
+// };
+
 function bubbleSizer(arr) {
-  arr.forEach(element => {
-    element/1000
-    console.log(element)
-  });
-};
+  console.log("bubblesizer new array")
+  var value = (arr * .00006);
+  console.log(value);
+  return value;
+  };
 
 // Grab Data and Build a Bubble Chart
 d3.json(`/complaints`).then((data) => {
+  console.log("mapping")
   const crdt_complaints = data.credit_rpt_complaints;
   const complaints_capita = data.complaints_percapita; 
   const state_abbr = data.state_abbr;
-  const state_pop_sz = bubbleSizer(data.state_population);
+  const state_pop = parseInt(data.state_population);
   const crdt_score = data.credit_score;
-  // console.log(data.state_population)
+  console.log(state_pop)
 
   var bubbleLayout = {
     margin: { t: 3 },
@@ -29,7 +40,7 @@ d3.json(`/complaints`).then((data) => {
       // [state_abbr, state_pop, crdt_score, complaints_capita, crdt_complaints]
       mode: "markers",
       marker: {
-        size: state_pop_sz,
+        size: (state_pop * .00006),
         // size: state_pop_sz,
         color: crdt_score,
         colorscale: "YlGnBu",
