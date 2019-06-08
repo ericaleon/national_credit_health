@@ -59,7 +59,7 @@
   </div>
 
   <!-- Load d3.js -->
-  <!-- <script src="https://d3js.org/d3.v4.js"></script> -->
+  <script src="https://d3js.org/d3.v4.js"></script>
   
   <!-- Add 2 buttons -->
   <button style="display:block; margin-left:auto; margin-right:auto" onclick="update(data1)">Average Credit Card Debt vs. Age</button>
@@ -89,7 +89,7 @@
       ];
       
       // set the dimensions and margins of the graph
-  var margin = {top: 40, right: 400, bottom: 20, left: 400},
+  var margin = {top: 40, right: 400, bottom: 20, left: 550},
       width = 800,
       height = 500 - margin.top - margin.bottom;
   // append the svg object to the body of the page
@@ -195,8 +195,7 @@
           
         </h4>
           <br>
-          <br>
-        <h5 style="text-align: justify; width: 75%; margin-left:auto; margin-right:auto">Below is the 2017 Average Vantage Score for each state vs CFPB* Complaints related to Credit Reporting, Credit Repair Services, or Other Personal Consumer Reports. </h5>
+        <h5 style="text-align: center; width: 75%; margin-left:auto; margin-right:auto">Below is the 2017 Average Vantage Score for each state vs CFPB* Complaints related to Credit Reporting, Credit Repair Services, or Other Personal Consumer Reports. </h5>
         <div id="bubble" style="width: 800px; height: 600px; margin-left: auto; margin-right:auto; align-content: center"></div>
         <p style="text-align: center; width: 50%; margin-left:auto; margin-right:auto; font-size: 8px">*Consumer Financial Protection Bureau, “Consumer Complaint Database”, 2017 <a href=https://www.consumerfinance.gov/data-research/consumer-complaints/search>https://www.consumerfinance.gov/data-research/consumer-complaints/search</a></p>
     </div>
@@ -209,20 +208,18 @@ var scoreColor = score_Color.replace(/&#34;/g, '"')
 var new_statedata = stateDATA.replace(/&#34;/g, '"')
 scoreColor=JSON.parse(scoreColor)
 new_statedata=JSON.parse(new_statedata)
-console.log(new_statedata.States);
+// console.log(scoreColor);
 </script>
 
 
-  <!-- <script src="https://cdn.plot.ly/plotly-1.31.2.min.js"></script> -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <!-- <script src="{{url_for('static', filename='d3.min.js')}}"></script> -->
-  <script type="text/javascript" src="../static/js/config.js"></script>
-  <script type="text/javascript" src="../static/js/logic_choropleth.js"></script>
-  <script type="text/javascript" src="../static/js/logic_bubble.js"></script>
-  <!-- <script src="{{ url_for('static', filename='js/logic_choropleth.js') }}"></script> -->
-  <script src="{{ url_for('static', filename='js/logic_bubble.js') }}"></script>
-
+<script type="text/javascript" src="../static/js/config.js"></script>	
+<script type="text/javascript" src="../static/js/logic_choropleth.js"></script>	
+<script type="text/javascript" src="../static/js/logic_bubble.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>	
+<!-- <script src="https://cdn.plot.ly/plotly-1.31.2.min.js"></script> -->  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="{{ url_for('static', filename='js/logic_bubble.js') }}"></script>
 </body>
 
 </html>

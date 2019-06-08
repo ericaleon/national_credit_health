@@ -1,5 +1,5 @@
 // Creating map object
-var map = L.map("map").setView([39.8097343, -98.5556199], 4);
+var map = L.map("map").setView([38.8097343, -95.5556199], 5);
 
 // Adding tile layer
 L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
@@ -12,12 +12,12 @@ L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 
 var proxyUrl = "https://cors-anywhere.herokuapp.com/https://docs.mapbox.com/help/demos/choropleth-studio-gl/stateData.geojson";
 // console.log(proxyUrl);
-
-
+// console.log(new_statedata)
+// console.log(scoreColor)
 // Grabbing our GeoJSON data..
 d3.json(proxyUrl, function(data) {
       // Creating a geoJSON layer with the retrieved data
-  console.log(data)  
+  // console.log(data)  
   L.geoJson(data, {
     // Style each feature
     style:  
@@ -150,6 +150,7 @@ for (var i=0; i<new_statedata.States.length; i++) {
    var marker = new L.Marker(markerLocation);
    map.addLayer(marker);
 
-   marker.bindPopup('<h4>' + state + '</h4><br><h5>State Score: ' + fin_score + '</h5><br><ul><li> Vantage Score: ' + credit + "</li><li>Debt/Income Ratio: " + debt +"%</li><li>Delinquency Rate: " + mortgage + "%</li><br><p>Financial Education Grade: " + edu, {offset: new L.point(5,5)});
+   marker.bindPopup('<h3>' + state + '</h3><br><h4>State Score: ' + fin_score + '</h4><br><ul><li> Vantage Score: ' + credit + "</li><li>Debt/Income Ratio: " + debt +"%</li><li>Delinquency Rate: " + mortgage + "%</li><hr><h5>Financial Education Grade: " + edu + "<h5>", {offset: new L.point(5,5)});
 
 }
+

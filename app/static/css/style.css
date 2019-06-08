@@ -61,3 +61,7 @@ html {
 h1 {
   text-align: justify;
 }
+
+.leaflet-popup-content {
+  font: 14px Arial, Helvetica, sans-serif;
+}

@@ -1,6 +1,7 @@
 function bubbleSizer(arr) {
   arr.forEach(element => {
-    element/100000
+    element/1000
+    console.log(element)
   });
 };
 
@@ -11,6 +12,7 @@ d3.json(`/complaints`).then((data) => {
   const state_abbr = data.state_abbr;
   const state_pop_sz = bubbleSizer(data.state_population);
   const crdt_score = data.credit_score;
+  // console.log(data.state_population)
 
   var bubbleLayout = {
     margin: { t: 3 },
@@ -27,7 +29,7 @@ d3.json(`/complaints`).then((data) => {
       // [state_abbr, state_pop, crdt_score, complaints_capita, crdt_complaints]
       mode: "markers",
       marker: {
-        size: 20,
+        size: state_pop_sz,
         // size: state_pop_sz,
         color: crdt_score,
         colorscale: "YlGnBu",
