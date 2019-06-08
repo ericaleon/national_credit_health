@@ -1,32 +1,41 @@
-// start with belly button example & update for complaints data
+function bubbleSizer(arr) {
+  arr.forEach(element => {
+    element/100000
+  });
+};
 
 // Grab Data and Build a Bubble Chart
 d3.json(`/complaints`).then((data) => {
-  // **replace variables below**
-  const otu_ids = data.otu_ids; //complaints count
-  const otu_labels = data.otu_labels; //state names
-  const sample_values = data.sample_values; //average credit score
+  const crdt_complaints = data.credit_rpt_complaints;
+  const complaints_capita = data.complaints_percapita; 
+  const state_abbr = data.state_abbr;
+  const state_pop_sz = bubbleSizer(data.state_population);
+  const crdt_score = data.credit_score;
 
   var bubbleLayout = {
-    margin: { t: 0 },
+    margin: { t: 3 },
     hovermode: "closest",
     xaxis: { title: "2017 Credit Reporting Complaints per Capita" },
     yaxis: { title: "Average Vantage Credit Score"}
   };
-  var bubbleData = [
+
+  var bubbleData = 
     {
-      // ** replace variables below **
-      x: otu_ids,
-      y: sample_values,
-      text: otu_labels,
+      x: complaints_capita,
+      y: crdt_score,
+      text: state_abbr,
+      // [state_abbr, state_pop, crdt_score, complaints_capita, crdt_complaints]
       mode: "markers",
       marker: {
-        size: sample_values, // state population
-        color: otu_ids,
-        colorscale: "YIGnBu"
+        size: 20,
+        // size: state_pop_sz,
+        color: crdt_score,
+        colorscale: "YlGnBu",
+        opacity: 0.75
       }
-    }
-  ];
+    };
 
-  Plotly.plot("bubble", bubbleData, bubbleLayout);
+
+  Plotly.newPlot("bubble", [bubbleData], bubbleLayout);
+  // console.log(bubbleData);
 });

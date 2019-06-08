@@ -77,8 +77,7 @@ def colorize(data):
     return c_dict
     
 
-
-
+# Flask routes
 @app.route('/')
 def home():
     """Render Home Page."""
@@ -110,63 +109,57 @@ def home():
     score_Color = json.dumps((colorize(states_list)), sort_keys=False)
    
     return render_template("index.html", stateDATA = stateDATA, score_Color = score_Color)
- 
+
+
+@app.route('/about')
+def about():
+    """Return About page with discussion on project"""
+    return render_template("index2.html")
+
+
 @app.route('/complaints')
 def complaints():
-    """Return consumer financial protection bureau complaint data"""
+    """Return consumer financial protection bureau complaint data combined with other state info"""
 
     # query complaints and state data tables
     sel = [
         Complaints.abbr, 
         State_data.Vantage_Score,
         State_data.state_population, 
-        Complaints.Product,
-        func.count(Complaints.Complaint_ID),
-        100000.0*func.count(Complaints.Complaint_ID)/State_data.state_population
+        func.count(Complaints.Product),
+        100000.0*func.count(Complaints.Product)/State_data.state_population
         ]
-    results = session.query(*sel).join(State_data, Complaints.abbr == State_data.abbr).\
-        group_by(State_data.abbr, Complaints.Product).order_by(Complaints.abbr.asc())
+    
+    query = session.query(*sel).join(State_data, Complaints.abbr == State_data.abbr).\
+        filter(Complaints.Product=="Credit reporting").group_by(State_data.abbr).\
+        order_by(Complaints.abbr.asc())
 
-    iter_results = iter(results)
+    # set up lists and iterate through results for json
+    abbr_list = []
+    crd_score_list = []
+    pop_list = []
+    complaints_list = []
+    comp_capita_list = []
 
-    # create & build nested dictionaries and lists for json
-    main_dict = {}
-    states_list = []   
-    for abbr, vantage, population, product, comptype_count, comptype_capita in results:
-        state_dict = {} 
-        if i == 0 or abbr[i] != abbr[i-1]:
-            state_dict["State"] = abbr
-            state_dict["Avg_Credit_Score"] = vantage
-            state_dict["Population"] = population
-            complaints_list = []
-            complaint_dict = {}
-            complaint_dict["Product"] = product
-            complaint_dict["Complaint_Count"] = comptype_count
-            complaint_dict["Complaints_per_Capita"] = comptype_capita
-            complaints_list.append(complaint_dict)
-        elif abbr[i] == abbr[i+1]:
-            complaint_dict = {}
-            complaint_dict["Product"] = product
-            complaint_dict["Complaint_Count"] = comptype_count
-            complaint_dict["Complaints_per_Capita"] = comptype_capita
-            complaints_list.append(complaint_dict)
-        else:
-            complaint_dict = {}
-            complaint_dict["Product"] = product
-            complaint_dict["Complaint_Count"] = comptype_count
-            complaint_dict["Complaints_per_Capita"] = comptype_capita
-            complaints_list.append(complaint_dict)
-            state_dict["Complaints_by_Type"] = complaints_list
-            states_list.append(state_dict)
+    for abbr, vantage, population, comp_count, comp_capita in query:
+        abbr_list.append(abbr)
+        crd_score_list.append(vantage)
+        pop_list.append(population)
+        complaints_list.append(comp_count)
+        comp_capita_list.append(round(comp_capita,3))
 
-    main_dict["States_Complaints"] = states_list
 
-    return jsonify(main_dict)
+    # Format the data to send as json
+    data = {
+        "state_abbr": abbr_list,
+        "credit_score": crd_score_list,
+        "state_population": pop_list,
+        "credit_rpt_complaints": complaints_list,
+        "complaints_percapita": comp_capita_list
+    }
 
-@app.route('/about')
-def about():
+    return jsonify(data)
 
-    return render_template("index2.html")
 
 if __name__ == '__main__':
     app.run(debug=True)

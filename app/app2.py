@@ -1,9 +1,7 @@
 # import dependencies
-import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine, func
-import decimal
+from sqlalchemy import create_engine, func, Column, Integer, Float, String
 
 import json
 from json import dumps
@@ -24,8 +22,11 @@ sys.path.append("Users/Emily/Desktop/national_credit_health/app/templates/static
 
 from flask_cors import CORS, cross_origin
 
+app = Flask(__name__)
+
+CORS(app, support_credentials=True)
+
 # DB Setup
-###########
 engine = create_engine('sqlite:///credit_health.db?check_same_thread=False')
 
 # reflect an existing database into a new model
@@ -41,12 +42,6 @@ State_lookup = Base.classes.state_lookup
 # Create our session (link) from Python to the DB
 session = Session(engine)
 
-#####end db setup######
-
-# Flask Setup & routes
-app = Flask(__name__)
-
-CORS(app, support_credentials=True)
 
 # helper function to assign colors for each state based on financial health scores
 def colorize(data):
@@ -126,29 +121,43 @@ def complaints():
         func.count(Complaints.Product),
         100000.0*func.count(Complaints.Product)/State_data.state_population
         ]
-    results = session.query(*sel).join(State_data, Complaints.abbr == State_data.abbr).\
+    query = session.query(*sel).join(State_data, Complaints.abbr == State_data.abbr).\
         filter(Complaints.Product=="Credit reporting").group_by(State_data.abbr).\
         order_by(Complaints.abbr.asc())
 
-    main_dict = {}
-    states_list = []   
-    for abbr, vantage, population, comp_count, comp_capita in results:
-        state_dict = {} 
-        state_dict["State"] = abbr
-        state_dict["Avg_Credit_Score"] = vantage
-        state_dict["Population"] = population
-        state_dict["Credit Reporting Complaints"] = comp_count
-        state_dict["Complaints_per_Capita"] = comp_capita
-        states_list.append(state_dict)
+    # results = pd.read_sql_query(query.statement, query.session.bind)
 
-    main_dict["States_Complaints"] = states_list
+    abbr_list = []
+    crd_score_list = []
+    pop_list = []
+    complaints_list = []
+    comp_capita_list = []
 
-    return jsonify(main_dict)
+    for abbr, vantage, population, comp_count, comp_capita in query:
+        abbr_list.append(abbr)
+        crd_score_list.append(vantage)
+        pop_list.append(population)
+        complaints_list.append(comp_count)
+        comp_capita_list.append(round(comp_capita,3))
+
+
+    # Format the data to send as json
+    data = {
+        "state_abbr": abbr_list,
+        "credit_score": crd_score_list,
+        "state_population": pop_list,
+        "credit_rpt_complaints": complaints_list,
+        "complaints_percapita": comp_capita_list
+    }
+
+    return jsonify(data)
+
     
 
-@app.route('/ProjectDiscussion')
-def DiscussionPage():
-    return render_template("discussion.html")
+@app.route('/about')
+def about():
+    """Return About page for discussion of project"""
+    return render_template("index2.html")
 
 if __name__ == '__main__':
     app.run(debug=True)

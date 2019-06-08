@@ -1,5 +1,5 @@
 // Creating map object
-var map = L.map("map").setView([39.8097343, -98.5556199], 5);
+var map = L.map("map").setView([39.8097343, -98.5556199], 4);
 
 // Adding tile layer
 L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
@@ -17,66 +17,66 @@ var proxyUrl = "https://cors-anywhere.herokuapp.com/https://docs.mapbox.com/help
 // Grabbing our GeoJSON data..
 d3.json(proxyUrl, function(data) {
       // Creating a geoJSON layer with the retrieved data
-  // console.log(data)   
+  console.log(data)  
   L.geoJson(data, {
     // Style each feature
     style:  
-        function(data){
-          // console.log(data)
-            switch (data.properties.name) {
-              case "Alabama" : return {color:scoreColor["Alabama"]};
-              case "Alaska": return {color:scoreColor["Alaska"]};
-              case "Arizona": return {color:scoreColor["Arizona"]};
-              case "Arkansas": return {color:scoreColor["Arkansas"]};
-              case "California": return {color:scoreColor["California"]};
-              case "Colorado": return {color:scoreColor["Colorado"]};
-              case "Connecticut": return {color:scoreColor["Connecticut"]};
-              case "Delaware": return {color:scoreColor["Delaware"]};
-              case "District of Columbia": return {color:scoreColor["District of Columbia"]};
-              case "Florida": return {color:scoreColor["Florida"]};
-              case "Georgia": return {color:scoreColor["Georgia"]};
-              case "Hawaii": return {color:scoreColor["Hawaii"]};
-              case "Idaho": return {color:scoreColor["Idaho"]};
-              case "Illinois": return {color:scoreColor["Illinois"]};
-              case "Indiana": return {color:scoreColor["Indiana"]};
-              case "Iowa": return {color:scoreColor["Iowa"]};
-              case "Kansas": return {color:scoreColor["Kansas"]};
-              case "Kentucky": return {color:scoreColor["Kentucky"]};
-              case "Louisiana": return {color:scoreColor["Louisiana"]};
-              case "Maine": return {color:scoreColor["Maine"]};
-              case "Maryland": return {color:scoreColor["Maryland"]};
-              case "Massachusetts": return {color:scoreColor["Massachusetts"]};
-              case "Michigan": return {color:scoreColor["Michigan"]};
-              case "Minnesota": return {color:scoreColor["Minnesota"]};
-              case "Mississippi": return {color:scoreColor["Mississippi"]};
-              case "Missouri": return {color:scoreColor["Missouri"]};
-              case "Montana": return {color:scoreColor["Montana"]};
-              case "Nebraska": return {color:scoreColor["Nebraska"]};
-              case "Nevada": return {color:scoreColor["Nevada"]};
-              case "New Hampshire": return {color:scoreColor["New Hampshire"]};
-              case "New Jersey": return {color:scoreColor["New Jersey"]};
-              case "New Mexico": return {color:scoreColor["New Mexico"]};
-              case "New York": return {color:scoreColor["New York"]};
-              case "North Carolina": return {color:scoreColor["North Carolina"]};
-              case "North Dakota": return {color:scoreColor["North Dakota"]};
-              case "Ohio": return {color:scoreColor["Ohio"]};
-              case "Oklahoma": return {color:scoreColor["Oklahoma"]};
-              case "Oregon": return {color:scoreColor["Oregon"]};
-              case "Pennsylvania": return {color:scoreColor["Pennsylvania"]}; 
-              case "Rhode Island": return {color:scoreColor["Rhode Island"]};
-              case "South Carolina": return {color:scoreColor["South Carolina"]};
-              case "South Dakota":return {color:scoreColor["South Dakota"]};
-              case "Tennessee": return {color:scoreColor["Tennessee"]};
-              case "Texas": return {color:scoreColor["Texas"]};
-              case "Utah": return {color:scoreColor["Utah"]};
-              case "Vermont": return {color:scoreColor["Vermont"]};
-              case "Virginia": return {color:scoreColor["Virginia"]};
-              case "Washington": return {color:scoreColor["Washington"]};
-              case "West Virginia": return {color:scoreColor["West Virginia"]};
-              case "Wisconsin": return {color:scoreColor["Wisconsin"]};
-              case "Wyoming": return {color:scoreColor["Wyoming"]};
-              default: 
-                return {color: "black"};
+      function(data){
+        // console.log(data)
+        switch (data.properties.name) {
+          case "Alabama" : return {color:scoreColor["Alabama"]};
+          case "Alaska": return {color:scoreColor["Alaska"]};
+          case "Arizona": return {color:scoreColor["Arizona"]};
+          case "Arkansas": return {color:scoreColor["Arkansas"]};
+          case "California": return {color:scoreColor["California"]};
+          case "Colorado": return {color:scoreColor["Colorado"]};
+          case "Connecticut": return {color:scoreColor["Connecticut"]};
+          case "Delaware": return {color:scoreColor["Delaware"]};
+          case "District of Columbia": return {color:scoreColor["District of Columbia"]};
+          case "Florida": return {color:scoreColor["Florida"]};
+          case "Georgia": return {color:scoreColor["Georgia"]};
+          case "Hawaii": return {color:scoreColor["Hawaii"]};
+          case "Idaho": return {color:scoreColor["Idaho"]};
+          case "Illinois": return {color:scoreColor["Illinois"]};
+          case "Indiana": return {color:scoreColor["Indiana"]};
+          case "Iowa": return {color:scoreColor["Iowa"]};
+          case "Kansas": return {color:scoreColor["Kansas"]};
+          case "Kentucky": return {color:scoreColor["Kentucky"]};
+          case "Louisiana": return {color:scoreColor["Louisiana"]};
+          case "Maine": return {color:scoreColor["Maine"]};
+          case "Maryland": return {color:scoreColor["Maryland"]};
+          case "Massachusetts": return {color:scoreColor["Massachusetts"]};
+          case "Michigan": return {color:scoreColor["Michigan"]};
+          case "Minnesota": return {color:scoreColor["Minnesota"]};
+          case "Mississippi": return {color:scoreColor["Mississippi"]};
+          case "Missouri": return {color:scoreColor["Missouri"]};
+          case "Montana": return {color:scoreColor["Montana"]};
+          case "Nebraska": return {color:scoreColor["Nebraska"]};
+          case "Nevada": return {color:scoreColor["Nevada"]};
+          case "New Hampshire": return {color:scoreColor["New Hampshire"]};
+          case "New Jersey": return {color:scoreColor["New Jersey"]};
+          case "New Mexico": return {color:scoreColor["New Mexico"]};
+          case "New York": return {color:scoreColor["New York"]};
+          case "North Carolina": return {color:scoreColor["North Carolina"]};
+          case "North Dakota": return {color:scoreColor["North Dakota"]};
+          case "Ohio": return {color:scoreColor["Ohio"]};
+          case "Oklahoma": return {color:scoreColor["Oklahoma"]};
+          case "Oregon": return {color:scoreColor["Oregon"]};
+          case "Pennsylvania": return {color:scoreColor["Pennsylvania"]}; 
+          case "Rhode Island": return {color:scoreColor["Rhode Island"]};
+          case "South Carolina": return {color:scoreColor["South Carolina"]};
+          case "South Dakota":return {color:scoreColor["South Dakota"]};
+          case "Tennessee": return {color:scoreColor["Tennessee"]};
+          case "Texas": return {color:scoreColor["Texas"]};
+          case "Utah": return {color:scoreColor["Utah"]};
+          case "Vermont": return {color:scoreColor["Vermont"]};
+          case "Virginia": return {color:scoreColor["Virginia"]};
+          case "Washington": return {color:scoreColor["Washington"]};
+          case "West Virginia": return {color:scoreColor["West Virginia"]};
+          case "Wisconsin": return {color:scoreColor["Wisconsin"]};
+          case "Wyoming": return {color:scoreColor["Wyoming"]};
+          default: 
+            return {color: "black"};
     }
   },
     // Called on each feature
@@ -102,8 +102,8 @@ d3.json(proxyUrl, function(data) {
           map.fitBounds(event.target.getBounds());
         }
       });
-    
-     
+
+
     }    
   }).addTo(map);
 
@@ -145,11 +145,11 @@ for (var i=0; i<new_statedata.States.length; i++) {
   var mortgage = new_statedata.States[i].Mortg_Delinquency;
   var edu = new_statedata.States[i].Ed_Grade;
   var state = new_statedata.States[i].State;
-  console.log(edu);
+  // console.log(edu);
    var markerLocation = new L.LatLng(lat, lon);
    var marker = new L.Marker(markerLocation);
    map.addLayer(marker);
 
-   marker.bindPopup('<h2>' + state + '</h2><hr><h3>State Score: ' + fin_score + '</h3><hr><ul><li> Vantage Score: ' + credit + "</li><li>Debt/Income Ratio: " + debt +"%</li><li>Delinquency Rate: " + mortgage + "%</li><hr><p>Financial Education Grade: " + edu, {offset: new L.point(10,10)});
+   marker.bindPopup('<h4>' + state + '</h4><br><h5>State Score: ' + fin_score + '</h5><br><ul><li> Vantage Score: ' + credit + "</li><li>Debt/Income Ratio: " + debt +"%</li><li>Delinquency Rate: " + mortgage + "%</li><br><p>Financial Education Grade: " + edu, {offset: new L.point(5,5)});
 
 }
