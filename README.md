@@ -36,7 +36,7 @@ There's no debt about it, credit scores (and how they add up, or don't) can be a
 
 * Data was gathered for this graph and cleaned (also via Python with Pandas and Jupyter Notebook) from the Consumer Financial Protection Bureau on complaints from 2017 for debt collection, payday lenders, vehicle loans, mortgage loans, student loans, credit reporting and credit cards. In the interest of time, we decided to narrow down complaint data those records specifically impacting Credit Reporting and Repair. This involved creating a python Flask route ('/complaints') where lists were created from SQLAlchemy queries which included calculations and a table join for both complaints data and overall state data. We were able to pull in data from this route via d3 and Plotly JS to create an interactive scatterplot to show how rate of complaints may or may not correlate with average credit scores in a given state. This data may be the hardest to extrapolate from since participation in the program is limited to those aware of it and therefore may not be an accurate representation of consumer complaints.
 
-!(Bubble)[https://github.com/emilyt1985/national_credit_health/blob/master/app/static/img/D3.gif]
+![Bubble](https://github.com/emilyt1985/national_credit_health/blob/master/app/static/img/D3.gif)
 
 ## Running the program
 
