@@ -22,6 +22,8 @@ There's no debt about it, credit scores (and how they add up, or don't) can be a
 - SQLite - Database Construction
 - [Leaflet](https://leafletjs.com/) - Mapping the Choropleth
 - [Plotly.js](https://plot.ly/javascript/) - Interactive Charts
+- JavaScript
+- Python Flask
 
 
 ## Mapping the Data
